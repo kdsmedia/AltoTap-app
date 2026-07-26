@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Platform, StyleSheet } from 'react-native';
+import { Image, ImageSourcePropType, Platform, StyleSheet, View } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@/constants/colors';
+import AdBannerBar, { AD_STRIP_HEIGHT } from '@/components/AdBannerBar';
 
 const NAV_ICONS = {
   home:    require('@/assets/images/nav-home.png'),
@@ -51,11 +52,11 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          height: 68 + (isWeb ? 0 : insets.bottom),
+          height: (isWeb ? 74 : AD_STRIP_HEIGHT + 10 + 74 + insets.bottom),
           paddingBottom: isWeb ? 0 : insets.bottom + 2,
-          paddingTop: 0,
+          paddingTop: isWeb ? 8 : AD_STRIP_HEIGHT + 10,
         },
-        tabBarBackground: () => null,
+        tabBarBackground: () => isWeb ? null : <AdBannerBar />,
       }}
     >
       <Tabs.Screen
