@@ -46,17 +46,8 @@ export default function TabLayout() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.gold,
         tabBarInactiveTintColor: COLORS.textMuted,
-        tabBarStyle: {
-          position: 'absolute',
-          backgroundColor: 'transparent',
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowOpacity: 0,
-          height: (isWeb ? 74 : AD_STRIP_HEIGHT + 10 + 74 + insets.bottom),
-          paddingBottom: isWeb ? 0 : insets.bottom + 2,
-          paddingTop: isWeb ? 8 : AD_STRIP_HEIGHT + 10,
-        },
-        tabBarBackground: () => isWeb ? null : <AdBannerBar />,
+        // Hide the built-in tab bar — PersistentNav in root layout handles navigation
+        tabBarStyle: { display: 'none' },
       }}
     >
       <Tabs.Screen

@@ -129,7 +129,7 @@ export default function TransactionsScreen() {
         <FlatList
           data={gameState.transactions}
           keyExtractor={tx => tx.id}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 86 }]}
           renderItem={({ item }) => <TxCard tx={item} />}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           showsVerticalScrollIndicator={false}

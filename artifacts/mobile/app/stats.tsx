@@ -54,7 +54,7 @@ export default function StatsScreen() {
     <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 86 }]}
       showsVerticalScrollIndicator={false}
     >
       {/* Gameplay stats */}

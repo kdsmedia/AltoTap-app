@@ -89,7 +89,7 @@ export default function WithdrawScreen() {
     <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 86 }]}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >

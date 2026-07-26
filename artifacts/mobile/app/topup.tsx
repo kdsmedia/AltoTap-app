@@ -57,7 +57,7 @@ export default function TopupScreen() {
     <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 86 }]}
       showsVerticalScrollIndicator={false}
     >
       {/* Balance */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
@@ -11,6 +11,7 @@ import { GameProvider } from '@/context/GameContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { COLORS } from '@/constants/colors';
 import SplashLoading from '@/components/SplashLoading';
+import PersistentNav from '@/components/PersistentNav';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,7 +44,7 @@ function RootLayoutNav() {
   }
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <AuthGate />
       <Stack
         screenOptions={{
@@ -59,8 +60,10 @@ function RootLayoutNav() {
         <Stack.Screen name="withdraw" options={{ title: 'Tarik Poin', headerBackTitle: 'Kembali' }} />
         <Stack.Screen name="topup" options={{ title: 'Isi Ulang VIP', headerBackTitle: 'Kembali' }} />
         <Stack.Screen name="transactions" options={{ title: 'Riwayat Transaksi', headerBackTitle: 'Kembali' }} />
+        <Stack.Screen name="spin" options={{ headerShown: false }} />
       </Stack>
-    </>
+      <PersistentNav />
+    </View>
   );
 }
 
