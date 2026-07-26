@@ -18,8 +18,10 @@ Both services start automatically via the artifact workflows:
 
 | Service | Workflow | Port |
 |---|---|---|
-| Expo Mobile | `artifacts/mobile: expo` | 18115 |
-| API Server | `artifacts/api-server: API Server` | 8080 |
+| Expo Mobile | `Expo Mobile` | 18115 |
+| API Server | `API Server` | 8080 |
+
+The API health check is available at `GET /api/healthz`.
 
 ## Database
 
@@ -33,4 +35,4 @@ Google OAuth (implicit flow) via `expo-web-browser`. Client ID is hardcoded in `
 
 ## User preferences
 
-<!-- Record user-confirmed preferences here -->
+- Ikon menu navigasi harus terlihat jelas dan cukup besar; ikon Upgrade dibuat lebih besar daripada ikon lainnya.

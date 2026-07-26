@@ -17,6 +17,7 @@ export interface Task {
   reward: number;
   completed: boolean;
   type: 'social' | 'game' | 'referral';
+  section: 'daily' | 'mandatory';
   link?: string;
 }
 
@@ -42,6 +43,8 @@ export interface GameState {
   tasksCompleted: number;
   friendsInvited: number;
   maxTps: number;
+  autoTapUntil: number | null;
+  autoTapRobotId: string | null;
   username: string;
   tasks: Task[];
   transactions: Transaction[];
@@ -73,6 +76,12 @@ export const RECHARGE_UPGRADES = [
   { cost: 18000, value: 10, label: 'Level 5 (MAX)', description: '10 energi/detik' },
 ];
 
+export const AUTO_TAP_ROBOTS = [
+  { id: 'robot-1', name: 'Robot 1', durationMinutes: 5, cost: 10000, icon: 'hardware-chip' },
+  { id: 'robot-2', name: 'Robot 2', durationMinutes: 10, cost: 50000, icon: 'rocket' },
+  { id: 'robot-3', name: 'Robot 3', durationMinutes: 25, cost: 150000, icon: 'timer' },
+] as const;
+
 export const VIP_PACKAGES = [
   { id: 'vip1', name: 'VIP 1', priceRupiah: 50000, points: 5000 },
   { id: 'vip2', name: 'VIP 2', priceRupiah: 85000, points: 7500 },
@@ -83,63 +92,98 @@ export const VIP_PACKAGES = [
 
 const DEFAULT_TASKS: Task[] = [
   {
-    id: 't1',
-    title: 'Ikuti Telegram',
-    description: 'Bergabung channel Telegram resmi AltoTap',
-    reward: 5000,
-    completed: false,
-    type: 'social',
-    link: 'https://t.me/altotap',
-  },
-  {
-    id: 't2',
-    title: 'Ikuti Instagram',
-    description: 'Follow akun Instagram @altotap untuk info terbaru',
-    reward: 3000,
-    completed: false,
-    type: 'social',
-    link: 'https://instagram.com',
-  },
-  {
-    id: 't3',
-    title: 'Ikuti Twitter/X',
-    description: 'Follow Twitter/X @altotap dan dapatkan reward',
-    reward: 2000,
-    completed: false,
-    type: 'social',
-    link: 'https://twitter.com',
-  },
-  {
-    id: 't4',
-    title: 'Undang 1 Teman',
-    description: 'Ajak teman pertamamu bergabung dengan link referral',
+    id: 'daily-invite-5',
+    title: 'Undang 5 teman',
+    description: 'Ajak lima teman bergabung dan mulai mengetuk bersama',
     reward: 5000,
     completed: false,
     type: 'referral',
+    section: 'daily',
   },
   {
-    id: 't5',
-    title: 'Ketuk 100 Kali',
-    description: 'Lakukan 100 ketukan di halaman utama',
-    reward: 1000,
+    id: 'daily-capacity',
+    title: 'Upgrade kapasitas',
+    description: 'Beli satu upgrade kapasitas energi',
+    reward: 3000,
     completed: false,
     type: 'game',
+    section: 'daily',
   },
   {
-    id: 't6',
-    title: 'Kumpulkan 10.000 Poin',
-    description: 'Raih total 10.000 poin dari ketukan',
-    reward: 2000,
+    id: 'daily-energy',
+    title: 'Upgrade energi',
+    description: 'Beli satu upgrade kecepatan isi ulang energi',
+    reward: 3000,
     completed: false,
     type: 'game',
+    section: 'daily',
   },
   {
-    id: 't7',
-    title: 'Beli Upgrade Pertama',
-    description: 'Tingkatkan kemampuan ketukmu di halaman Peningkatan',
-    reward: 2000,
+    id: 'daily-ad-3',
+    title: 'Tonton iklan 3x',
+    description: 'Selesaikan tiga tontonan iklan untuk mendapatkan hadiah',
+    reward: 1500,
     completed: false,
     type: 'game',
+    section: 'daily',
+  },
+  {
+    id: 'daily-ad-5',
+    title: 'Tonton iklan 5x',
+    description: 'Selesaikan lima tontonan iklan untuk mendapatkan hadiah',
+    reward: 2500,
+    completed: false,
+    type: 'game',
+    section: 'daily',
+  },
+  {
+    id: 'daily-ad-10',
+    title: 'Tonton iklan 10x',
+    description: 'Selesaikan sepuluh tontonan iklan untuk mendapatkan hadiah',
+    reward: 5000,
+    completed: false,
+    type: 'game',
+    section: 'daily',
+  },
+  {
+    id: 'mandatory-youtube',
+    title: 'Subscribe YouTube',
+    description: 'Subscribe YouTube.com/@sidhanie',
+    reward: 5000,
+    completed: false,
+    type: 'social',
+    section: 'mandatory',
+    link: 'https://www.youtube.com/@sidhanie',
+  },
+  {
+    id: 'mandatory-instagram',
+    title: 'Ikuti Instagram',
+    description: 'Ikuti Instagram.com/@sidhanie06',
+    reward: 4000,
+    completed: false,
+    type: 'social',
+    section: 'mandatory',
+    link: 'https://www.instagram.com/sidhanie06',
+  },
+  {
+    id: 'mandatory-tiktok-sidhanie',
+    title: 'Ikuti TikTok @sidhanie',
+    description: 'Ikuti akun TikTok.com/@sidhanie',
+    reward: 4000,
+    completed: false,
+    type: 'social',
+    section: 'mandatory',
+    link: 'https://www.tiktok.com/@sidhanie',
+  },
+  {
+    id: 'mandatory-tiktok-altomedia',
+    title: 'Ikuti TikTok @altomediaindonesia',
+    description: 'Ikuti akun TikTok.com/@altomediaindonesia',
+    reward: 4000,
+    completed: false,
+    type: 'social',
+    section: 'mandatory',
+    link: 'https://www.tiktok.com/@altomediaindonesia',
   },
 ];
 
@@ -156,6 +200,8 @@ const DEFAULT_STATE: GameState = {
   tasksCompleted: 0,
   friendsInvited: 0,
   maxTps: 0,
+  autoTapUntil: null,
+  autoTapRobotId: null,
   username: 'Pengguna',
   tasks: DEFAULT_TASKS,
   transactions: [],
@@ -172,6 +218,7 @@ interface GameContextType {
   buyUpgrade: (
     type: 'multiTap' | 'energyCap' | 'recharge'
   ) => { success: boolean; message: string };
+  rentAutoTap: (robotId: string) => { success: boolean; message: string };
   completeTask: (taskId: string) => void;
   addTransaction: (tx: Omit<Transaction, 'id' | 'date'>) => void;
   updateUsername: (name: string) => void;
@@ -184,6 +231,7 @@ export const GameContext = createContext<GameContextType>({
   isLoaded: false,
   tap: () => ({ success: false, pointsEarned: 0 }),
   buyUpgrade: () => ({ success: false, message: '' }),
+  rentAutoTap: () => ({ success: false, message: '' }),
   completeTask: () => {},
   addTransaction: () => {},
   updateUsername: () => {},
@@ -223,18 +271,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
-  // Energy recharge every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setGameState(prev => {
-        if (prev.energy >= prev.maxEnergy) return prev;
-        const rate = RECHARGE_UPGRADES[prev.rechargeLevel]?.value ?? 1;
-        return { ...prev, energy: Math.min(prev.energy + rate, prev.maxEnergy) };
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   const persist = useCallback((state: GameState) => {
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
@@ -264,6 +300,44 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return result;
   }, [persist]);
 
+  // Recharge energy and award auto-tap points once per second.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGameState(prev => {
+        const now = Date.now();
+        let next = prev;
+        let changed = false;
+
+        if (prev.energy < prev.maxEnergy) {
+          const rate = RECHARGE_UPGRADES[prev.rechargeLevel]?.value ?? 1;
+          next = {
+            ...next,
+            energy: Math.min(prev.energy + rate, prev.maxEnergy),
+          };
+          changed = true;
+        }
+
+        if (prev.autoTapUntil && prev.autoTapRobotId) {
+          if (now >= prev.autoTapUntil) {
+            next = { ...next, autoTapUntil: null, autoTapRobotId: null };
+            changed = true;
+          } else {
+            next = {
+              ...next,
+              points: next.points + prev.pointsPerTap,
+              lifetimePoints: next.lifetimePoints + prev.pointsPerTap,
+            };
+            changed = true;
+          }
+        }
+
+        if (changed) persist(next);
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [persist]);
+
   const buyUpgrade = useCallback(
     (type: 'multiTap' | 'energyCap' | 'recharge'): { success: boolean; message: string } => {
       let outcome = { success: false, message: '' };
@@ -278,8 +352,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           status: 'completed',
         });
 
-        const unlockT7 = (tasks: Task[]) =>
-          tasks.map(t => (t.id === 't7' ? { ...t, completed: true } : t));
+        const completeTaskForUpgrade = (tasks: Task[], taskId: string) =>
+          tasks.map(t => (t.id === taskId ? { ...t, completed: true } : t));
 
         if (type === 'multiTap') {
           const next = prev.multiTapLevel + 1;
@@ -298,7 +372,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             points: prev.points - cfg.cost,
             multiTapLevel: next,
             pointsPerTap: cfg.value,
-            tasks: unlockT7(prev.tasks),
+            tasks: prev.tasks,
             transactions: [genTx(`Upgrade Multi-tap ${cfg.label}`, cfg.cost), ...prev.transactions],
           };
           persist(updated);
@@ -322,7 +396,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             points: prev.points - cfg.cost,
             energyCapLevel: next,
             maxEnergy: cfg.value,
-            tasks: unlockT7(prev.tasks),
+            tasks: completeTaskForUpgrade(prev.tasks, 'daily-capacity'),
             transactions: [genTx(`Upgrade Kapasitas Energi ${cfg.label}`, cfg.cost), ...prev.transactions],
           };
           persist(updated);
@@ -345,7 +419,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             ...prev,
             points: prev.points - cfg.cost,
             rechargeLevel: next,
-            tasks: unlockT7(prev.tasks),
+            tasks: completeTaskForUpgrade(prev.tasks, 'daily-energy'),
             transactions: [genTx(`Upgrade Isi Ulang ${cfg.label}`, cfg.cost), ...prev.transactions],
           };
           persist(updated);
@@ -353,6 +427,55 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         }
 
         return prev;
+      });
+
+      return outcome;
+    },
+    [persist]
+  );
+
+  const rentAutoTap = useCallback(
+    (robotId: string): { success: boolean; message: string } => {
+      let outcome = { success: false, message: '' };
+
+      setGameState(prev => {
+        const robot = AUTO_TAP_ROBOTS.find(item => item.id === robotId);
+        if (!robot) {
+          outcome = { success: false, message: 'Robot tidak ditemukan' };
+          return prev;
+        }
+        if (prev.autoTapUntil && prev.autoTapUntil > Date.now()) {
+          outcome = { success: false, message: 'Masih ada robot auto tap yang aktif' };
+          return prev;
+        }
+        if (prev.points < robot.cost) {
+          outcome = { success: false, message: 'Poin tidak cukup' };
+          return prev;
+        }
+
+        outcome = {
+          success: true,
+          message: `${robot.name} aktif selama ${robot.durationMinutes} menit`,
+        };
+        const updated: GameState = {
+          ...prev,
+          points: prev.points - robot.cost,
+          autoTapUntil: Date.now() + robot.durationMinutes * 60_000,
+          autoTapRobotId: robot.id,
+          transactions: [
+            {
+              id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
+              type: 'upgrade',
+              amount: -robot.cost,
+              description: `Sewa ${robot.name} (${robot.durationMinutes} menit)`,
+              date: new Date().toISOString(),
+              status: 'completed',
+            },
+            ...prev.transactions,
+          ],
+        };
+        persist(updated);
+        return updated;
       });
 
       return outcome;
@@ -463,6 +586,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         isLoaded,
         tap,
         buyUpgrade,
+        rentAutoTap,
         completeTask,
         addTransaction,
         updateUsername,

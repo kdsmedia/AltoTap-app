@@ -50,9 +50,15 @@ export default function SplashLoading({ onDone }: Props) {
     <View style={styles.container}>
       {/* Full-screen splash image */}
       <Image
-        source={require('@/assets/images/app-bg.png')}
+        source={require('@/assets/images/login-bg.jpg')}
         style={StyleSheet.absoluteFill}
         resizeMode="cover"
+      />
+      <View pointerEvents="none" style={styles.overlay} />
+      <Image
+        source={require('@/assets/images/icon.png')}
+        style={styles.logo}
+        resizeMode="contain"
       />
 
       {/* Progress bar at bottom */}
@@ -70,6 +76,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0D2B0D',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 48, 10, 0.12)',
+  },
+  logo: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '31%',
+    width: 154,
+    height: 154,
+    borderRadius: 34,
   },
   bottom: {
     position: 'absolute',

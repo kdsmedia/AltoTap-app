@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, Platform, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,11 +13,23 @@ const NAV_ICONS = {
   profile: require('@/assets/images/nav-profile.png'),
 };
 
-function NavIcon({ source, focused }: { source: ReturnType<typeof require>; focused: boolean }) {
+function NavIcon({
+  source,
+  focused,
+  isUpgrade = false,
+}: {
+  source: ImageSourcePropType;
+  focused: boolean;
+  isUpgrade?: boolean;
+}) {
   return (
     <Image
       source={source}
-      style={[styles.tabIcon, { opacity: focused ? 1 : 0.45 }]}
+      style={[
+        styles.tabIcon,
+        isUpgrade && styles.upgradeIcon,
+        { opacity: focused ? 1 : 0.45 },
+      ]}
       resizeMode="contain"
     />
   );
@@ -67,7 +79,9 @@ export default function TabLayout() {
         name="upgrades"
         options={{
           title: 'Upgrade',
-          tabBarIcon: ({ focused }) => <NavIcon source={NAV_ICONS.upgrade} focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <NavIcon source={NAV_ICONS.upgrade} focused={focused} isUpgrade />
+          ),
         }}
       />
       <Tabs.Screen
@@ -90,7 +104,11 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabIcon: {
-    width: 30,
-    height: 30,
+    width: 36,
+    height: 36,
+  },
+  upgradeIcon: {
+    width: 44,
+    height: 44,
   },
 });

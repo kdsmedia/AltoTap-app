@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FlatList,
+  Linking,
   Platform,
   StyleSheet,
   Text,
@@ -18,21 +19,44 @@ function fmt(n: number): string {
   return n.toLocaleString('id-ID');
 }
 
-function taskIcon(type: Task['type']) {
+function taskIcon(task: Task) {
+  if (task.id === 'daily-invite-5') return 'people';
+  if (task.id === 'daily-capacity') return 'battery-charging';
+  if (task.id === 'daily-energy') return 'flash';
+  if (task.id.startsWith('daily-ad-')) return 'play-circle';
+  if (task.id === 'mandatory-youtube') return 'logo-youtube';
+  if (task.id === 'mandatory-instagram') return 'logo-instagram';
+  if (task.id.startsWith('mandatory-tiktok-')) return 'logo-tiktok';
+  const type = task.type;
   if (type === 'social') return 'share-social';
   if (type === 'referral') return 'people';
   return 'game-controller';
 }
 
-function taskColor(type: Task['type']) {
+function taskColor(task: Task) {
+  if (task.id === 'mandatory-youtube') return '#FF0033';
+  if (task.id === 'mandatory-instagram') return '#E1306C';
+  if (task.id.startsWith('mandatory-tiktok-')) return '#25F4EE';
+  if (task.id.startsWith('daily-ad-')) return COLORS.amber;
+  if (task.id === 'daily-capacity') return COLORS.blue;
+  if (task.id === 'daily-energy') return COLORS.amber;
+  const type = task.type;
   if (type === 'social') return COLORS.blue;
   if (type === 'referral') return COLORS.green;
   return COLORS.amber;
 }
 
-function TaskCard({ task, onClaim }: { task: Task; onClaim: () => void }) {
-  const iconName = taskIcon(task.type);
-  const color = taskColor(task.type);
+function TaskCard({
+  task,
+  onClaim,
+  onOpen,
+}: {
+  task: Task;
+  onClaim: () => void;
+  onOpen: () => void;
+}) {
+  const iconName = taskIcon(task);
+  const color = taskColor(task);
 
   return (
     <View style={[styles.card, task.completed && styles.cardDone]}>
@@ -44,6 +68,12 @@ function TaskCard({ task, onClaim }: { task: Task; onClaim: () => void }) {
           {task.title}
         </Text>
         <Text style={styles.cardDesc}>{task.description}</Text>
+        {task.link && !task.completed && (
+          <TouchableOpacity onPress={onOpen} style={styles.linkButton}>
+            <Ionicons name="open-outline" size={13} color={COLORS.blue} />
+            <Text style={styles.linkText}>Buka tautan</Text>
+          </TouchableOpacity>
+        )}
         <View style={styles.rewardRow}>
           <Ionicons name="star" size={12} color={COLORS.gold} />
           <Text style={styles.rewardText}>+{fmt(task.reward)} poin</Text>
@@ -74,6 +104,13 @@ export default function TasksScreen() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     completeTask(taskId);
   };
+
+  const handleOpen = (link: string) => {
+    Linking.openURL(link).catch(() => {});
+  };
+
+  const dailyTasks = gameState.tasks.filter(task => task.section === 'daily');
+  const mandatoryTasks = gameState.tasks.filter(task => task.section === 'mandatory');
 
   return (
     <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
@@ -109,12 +146,39 @@ export default function TasksScreen() {
 
       {/* Task list */}
       <FlatList
-        data={gameState.tasks}
+        data={mandatoryTasks}
         keyExtractor={t => t.id}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="calendar-outline" size={18} color={COLORS.amber} />
+              <Text style={styles.sectionTitle}>Tugas Harian</Text>
+              <Text style={styles.sectionCount}>{dailyTasks.length}</Text>
+            </View>
+            {dailyTasks.map(task => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onClaim={() => handleClaim(task.id)}
+                onOpen={() => handleOpen(task.link!)}
+              />
+            ))}
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="ribbon-outline" size={18} color={COLORS.gold} />
+              <Text style={styles.sectionTitle}>Tugas Wajib</Text>
+              <Text style={styles.sectionCount}>{mandatoryTasks.length}</Text>
+            </View>
+          </View>
+        }
         renderItem={({ item }) => (
-          <TaskCard task={item} onClaim={() => handleClaim(item.id)} />
+          <TaskCard
+            task={item}
+            onClaim={() => handleClaim(item.id)}
+            onOpen={() => handleOpen(item.link!)}
+          />
         )}
+        ListFooterComponent={<View style={{ height: 8 }} />}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       />
     </BgWrapper>
@@ -174,6 +238,28 @@ const styles = StyleSheet.create({
     color: COLORS.textMuted,
     fontFamily: 'Inter_400Regular',
   },
+  sectionHeader: {
+    gap: 10,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingTop: 6,
+    paddingBottom: 2,
+  },
+  sectionTitle: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    fontFamily: 'Inter_700Bold',
+  },
+  sectionCount: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    fontFamily: 'Inter_600SemiBold',
+  },
   list: {
     paddingHorizontal: 16,
     paddingBottom: Platform.OS === 'web' ? 34 : 16,
@@ -223,6 +309,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     marginTop: 2,
+  },
+  linkButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+  },
+  linkText: {
+    fontSize: 11,
+    color: COLORS.blue,
+    fontFamily: 'Inter_600SemiBold',
   },
   rewardText: {
     fontSize: 12,

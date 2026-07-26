@@ -21,12 +21,13 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require('@/assets/images/app-bg.png')}
+      source={require('@/assets/images/login-bg.jpg')}
       style={styles.bg}
       resizeMode="cover"
     >
+      <View pointerEvents="none" style={styles.backgroundOverlay} />
       {/* ── App Icon ── */}
-      <View style={[styles.iconWrap, { marginTop: topPad + 32 }]}>
+      <View style={[styles.iconWrap, { marginTop: topPad + 12 }]}>
         <Image
           source={require('@/assets/images/icon.png')}
           style={styles.icon}
@@ -77,6 +78,10 @@ const styles = StyleSheet.create({
   bg: {
     flex: 1,
   },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 48, 10, 0.14)',
+  },
   /* App icon centred in upper portion */
   iconWrap: {
     flex: 1,
@@ -84,9 +89,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    width: 180,
-    height: 180,
-    borderRadius: 36,
+    width: 196,
+    height: 196,
+    borderRadius: 42,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.45,
@@ -96,9 +101,9 @@ const styles = StyleSheet.create({
   /* Bottom bar pinned to bottom */
   bottom: {
     alignItems: 'center',
-    paddingHorizontal: 28,
-    gap: 12,
-    paddingTop: 8,
+    paddingHorizontal: 22,
+    gap: 14,
+    paddingTop: 10,
   },
   /* Yellow Google pill */
   googleBtn: {
@@ -107,10 +112,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: '#FFD600',
-    paddingVertical: 13,
-    paddingHorizontal: 28,
+    minWidth: 286,
+    paddingVertical: 15,
+    paddingHorizontal: 26,
     borderRadius: 50,
-    gap: 10,
+    gap: 11,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
@@ -131,8 +137,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 50,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.55)',
-    backgroundColor: 'rgba(0,0,0,0.18)',
+    borderColor: 'rgba(255,255,255,0.72)',
+    backgroundColor: 'rgba(0,35,8,0.34)',
   },
   guestText: {
     fontSize: 13,
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.9)',
+    color: 'rgba(255,255,255,0.94)',
     textAlign: 'center',
     lineHeight: 18,
     fontFamily: 'Inter_400Regular',
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 11,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.65)',
+    color: 'rgba(255,255,255,0.8)',
     letterSpacing: 2.5,
     fontFamily: 'Inter_700Bold',
   },

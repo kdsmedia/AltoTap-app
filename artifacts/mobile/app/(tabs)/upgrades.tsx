@@ -15,6 +15,7 @@ import {
   ENERGY_CAP_UPGRADES,
   MULTI_TAP_UPGRADES,
   RECHARGE_UPGRADES,
+  AUTO_TAP_ROBOTS,
   useGame,
 } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
@@ -140,7 +141,7 @@ function UpgradeCard({
 
 export default function UpgradesScreen() {
   const insets = useSafeAreaInsets();
-  const { gameState, buyUpgrade } = useGame();
+  const { gameState, buyUpgrade, rentAutoTap } = useGame();
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
 
   const handleBuy = (type: UpgradeType) => {
@@ -153,6 +154,16 @@ export default function UpgradesScreen() {
     if (!result.success) {
       Alert.alert('Gagal', result.message);
     }
+  };
+
+  const handleRent = (robotId: string) => {
+    const result = rentAutoTap(robotId);
+    Haptics.notificationAsync(
+      result.success
+        ? Haptics.NotificationFeedbackType.Success
+        : Haptics.NotificationFeedbackType.Error
+    );
+    if (!result.success) Alert.alert('Gagal', result.message);
   };
 
   const mt = MULTI_TAP_UPGRADES;
@@ -205,8 +216,8 @@ export default function UpgradesScreen() {
         />
 
         <UpgradeCard
-          title="Kecepatan Isi Ulang"
-          subtitle="Energi yang diisi per detik"
+          title="Energi"
+          subtitle="Kecepatan isi ulang energi"
           icon="flash"
           color={COLORS.amber}
           type="recharge"
@@ -218,9 +229,79 @@ export default function UpgradesScreen() {
           userPoints={gameState.points}
           onBuy={handleBuy}
         />
+
+        <View style={styles.sectionHeading}>
+          <View style={styles.sectionHeadingIcon}>
+            <Ionicons name="hardware-chip-outline" size={18} color={COLORS.gold} />
+          </View>
+          <View style={styles.sectionHeadingText}>
+            <Text style={styles.sectionTitle}>Sewa Auto Tap</Text>
+            <Text style={styles.sectionSubtitle}>Robot mengetuk otomatis selama durasi sewa</Text>
+          </View>
+        </View>
+
+        {AUTO_TAP_ROBOTS.map(robot => {
+          const isActive =
+            gameState.autoTapRobotId === robot.id &&
+            !!gameState.autoTapUntil &&
+            gameState.autoTapUntil > Date.now();
+          const activeRobot =
+            gameState.autoTapUntil && gameState.autoTapUntil > Date.now()
+              ? AUTO_TAP_ROBOTS.find(item => item.id === gameState.autoTapRobotId)
+              : undefined;
+          const canAfford = gameState.points >= robot.cost;
+
+          return (
+            <View key={robot.id} style={[styles.robotCard, isActive && styles.robotCardActive]}>
+              <View style={[styles.robotIconBox, { backgroundColor: COLORS.gold + '22' }]}>
+                <Ionicons name={robot.icon as any} size={26} color={COLORS.gold} />
+              </View>
+              <View style={styles.robotInfo}>
+                <Text style={styles.robotTitle}>{robot.name}</Text>
+                <Text style={styles.robotDesc}>
+                  Aktif {robot.durationMinutes} menit · +{fmt(gameState.pointsPerTap)} poin/detik
+                </Text>
+                {isActive && gameState.autoTapUntil && (
+                  <Text style={styles.activeText}>
+                    Aktif · {formatRemaining(gameState.autoTapUntil)}
+                  </Text>
+                )}
+              </View>
+              {isActive ? (
+                <View style={styles.activeBadge}>
+                  <Ionicons name="checkmark-circle" size={17} color={COLORS.green} />
+                  <Text style={styles.activeBadgeText}>Aktif</Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.rentButton,
+                    { backgroundColor: canAfford && !activeRobot ? COLORS.gold : COLORS.surfaceVariant },
+                  ]}
+                  onPress={() => handleRent(robot.id)}
+                  disabled={!canAfford || !!activeRobot}
+                  testID={`rent-${robot.id}`}
+                >
+                  <Text style={[styles.rentButtonText, { color: canAfford && !activeRobot ? '#000' : COLORS.textMuted }]}>
+                    {fmt(robot.cost)}
+                  </Text>
+                  <Text style={[styles.rentButtonCaption, { color: canAfford && !activeRobot ? '#000' : COLORS.textMuted }]}>
+                    poin
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          );
+        })}
       </ScrollView>
     </BgWrapper>
   );
+}
+
+function formatRemaining(until: number): string {
+  const seconds = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
 const styles = StyleSheet.create({
@@ -347,6 +428,107 @@ const styles = StyleSheet.create({
   maxText: {
     fontSize: 13,
     color: COLORS.green,
+    fontFamily: 'Inter_600SemiBold',
+  },
+  sectionHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 4,
+    paddingTop: 4,
+  },
+  sectionHeadingIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.gold + '44',
+  },
+  sectionHeadingText: {
+    flex: 1,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    fontFamily: 'Inter_700Bold',
+  },
+  sectionSubtitle: {
+    marginTop: 2,
+    fontSize: 12,
+    color: COLORS.textMuted,
+    fontFamily: 'Inter_400Regular',
+  },
+  robotCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 11,
+    padding: 13,
+    borderRadius: 14,
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  robotCardActive: {
+    borderColor: COLORS.green + '88',
+    backgroundColor: COLORS.green + '12',
+  },
+  robotIconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  robotInfo: {
+    flex: 1,
+  },
+  robotTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    fontFamily: 'Inter_700Bold',
+  },
+  robotDesc: {
+    marginTop: 3,
+    fontSize: 11,
+    color: COLORS.textMuted,
+    fontFamily: 'Inter_400Regular',
+  },
+  activeText: {
+    marginTop: 4,
+    fontSize: 12,
+    color: COLORS.green,
+    fontFamily: 'Inter_700Bold',
+  },
+  activeBadge: {
+    alignItems: 'center',
+    gap: 2,
+    minWidth: 48,
+  },
+  activeBadgeText: {
+    fontSize: 11,
+    color: COLORS.green,
+    fontFamily: 'Inter_700Bold',
+  },
+  rentButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 64,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  rentButtonText: {
+    fontSize: 13,
+    fontWeight: '700',
+    fontFamily: 'Inter_700Bold',
+  },
+  rentButtonCaption: {
+    fontSize: 10,
     fontFamily: 'Inter_600SemiBold',
   },
 });
