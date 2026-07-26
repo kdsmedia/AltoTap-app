@@ -1,6 +1,8 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  Image,
+  ImageBackground,
   Platform,
   StyleSheet,
   Text,
@@ -14,16 +16,31 @@ import { useAuth } from '@/context/AuthContext';
 export default function LoginScreen() {
   const { signIn, signInAsGuest, signingIn } = useAuth();
   const insets = useSafeAreaInsets();
-  const botPad = Platform.OS === 'web' ? 48 : insets.bottom + 32;
+  const topPad  = Platform.OS === 'web' ? 48 : insets.top + 16;
+  const botPad  = Platform.OS === 'web' ? 40 : insets.bottom + 24;
 
   return (
-    <View style={styles.container}>
-      {/* Buttons centered in lower half of screen */}
+    <ImageBackground
+      source={require('@/assets/images/login-bg.jpg')}
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      {/* ── App Icon ── */}
+      <View style={[styles.iconWrap, { marginTop: topPad + 32 }]}>
+        <Image
+          source={require('@/assets/images/icon.png')}
+          style={styles.icon}
+          resizeMode="contain"
+        />
+      </View>
+
+      {/* ── Bottom Section ── */}
       <View style={[styles.bottom, { paddingBottom: botPad }]}>
         {signingIn ? (
-          <ActivityIndicator size="large" color="#FFD600" style={styles.loader} />
+          <ActivityIndicator size="large" color="#FFD600" />
         ) : (
           <>
+            {/* Google button */}
             <TouchableOpacity
               onPress={signIn}
               activeOpacity={0.82}
@@ -34,6 +51,7 @@ export default function LoginScreen() {
               <Text style={styles.gText}>Masuk Dengan Google</Text>
             </TouchableOpacity>
 
+            {/* Guest button */}
             <TouchableOpacity
               onPress={signInAsGuest}
               activeOpacity={0.75}
@@ -51,29 +69,38 @@ export default function LoginScreen() {
 
         <Text style={styles.brand}>ALTOMEDIA</Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  bg: {
     flex: 1,
-    backgroundColor: '#000',
   },
+  /* App icon centred in upper portion */
+  iconWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    width: 180,
+    height: 180,
+    borderRadius: 36,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    elevation: 20,
+  },
+  /* Bottom bar pinned to bottom */
   bottom: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     alignItems: 'center',
     paddingHorizontal: 28,
-    paddingTop: 40,
-    gap: 14,
+    gap: 12,
+    paddingTop: 8,
   },
-  loader: {
-    marginBottom: 8,
-  },
-  /* ── Yellow pill button ── */
+  /* Yellow Google pill */
   googleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -81,7 +108,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#FFD600',
     paddingVertical: 13,
-    paddingHorizontal: 24,
+    paddingHorizontal: 28,
     borderRadius: 50,
     gap: 10,
     shadowColor: '#000',
@@ -91,40 +118,40 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   gText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '900',
     color: '#000',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
     fontFamily: 'Inter_700Bold',
   },
-  /* ── Ghost pill button ── */
+  /* Ghost pill for guest */
   guestBtn: {
     alignSelf: 'center',
-    paddingVertical: 10,
+    paddingVertical: 9,
     paddingHorizontal: 24,
     borderRadius: 50,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.4)',
+    borderColor: 'rgba(255,255,255,0.55)',
+    backgroundColor: 'rgba(0,0,0,0.18)',
   },
   guestText: {
     fontSize: 13,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.8)',
+    color: 'rgba(255,255,255,0.9)',
     letterSpacing: 1.5,
     fontFamily: 'Inter_700Bold',
   },
   disclaimer: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: 'rgba(255,255,255,0.9)',
     textAlign: 'center',
     lineHeight: 18,
     fontFamily: 'Inter_400Regular',
-    marginTop: 4,
   },
   brand: {
     fontSize: 11,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.35)',
+    color: 'rgba(255,255,255,0.65)',
     letterSpacing: 2.5,
     fontFamily: 'Inter_700Bold',
   },
