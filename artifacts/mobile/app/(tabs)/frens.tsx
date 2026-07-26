@@ -52,7 +52,7 @@ export default function FrensScreen() {
     <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 90 }]}
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}

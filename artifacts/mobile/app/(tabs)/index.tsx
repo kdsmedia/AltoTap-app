@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   energySection: {
     width: '100%',
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'web' ? 34 : 16,
+    paddingBottom: Platform.OS === 'web' ? 34 : 90,
     gap: 6,
   },
   energyBarBg: {
