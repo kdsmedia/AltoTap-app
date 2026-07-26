@@ -28,7 +28,7 @@ function NavIcon({
       style={[
         styles.tabIcon,
         isUpgrade && styles.upgradeIcon,
-        { opacity: focused ? 1 : 0.45 },
+        { opacity: focused ? 1 : 0.6 },
       ]}
       resizeMode="contain"
     />
@@ -44,20 +44,21 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.gold,
         tabBarInactiveTintColor: COLORS.textMuted,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: isIOS ? 'transparent' : COLORS.surface,
-          borderTopWidth: isWeb ? 1 : 0,
-          borderTopColor: COLORS.border,
+          backgroundColor: isIOS ? 'transparent' : 'rgba(0,0,0,0.55)',
+          borderTopWidth: 0,
           elevation: 0,
+          height: 72 + (isWeb ? 0 : insets.bottom),
           paddingBottom: isWeb ? 0 : insets.bottom,
-          ...(isWeb ? { height: 84 } : {}),
+          paddingTop: 4,
         },
         tabBarBackground: () =>
           isIOS ? (
-            <BlurView intensity={80} tint="dark" style={StyleSheet.absoluteFill} />
+            <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill} />
           ) : null,
       }}
     >
@@ -104,11 +105,12 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabIcon: {
-    width: 36,
-    height: 36,
+    width: 52,
+    height: 52,
   },
   upgradeIcon: {
-    width: 44,
-    height: 44,
+    width: 66,
+    height: 66,
+    marginBottom: 8,
   },
 });
