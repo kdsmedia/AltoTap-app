@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   placeholder: {
     flex: 1,
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   placeholderSub: {
     fontSize: 14,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
     lineHeight: 22,
   },

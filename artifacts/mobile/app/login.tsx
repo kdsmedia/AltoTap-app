@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000',
     letterSpacing: 0.2,
-    fontFamily: 'Inter_700Bold',
+    
   },
   /* Ghost pill for guest */
   guestBtn: {
@@ -145,20 +145,20 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: 'rgba(255,255,255,0.9)',
     letterSpacing: 1.5,
-    fontFamily: 'Inter_700Bold',
+    
   },
   disclaimer: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.94)',
     textAlign: 'center',
     lineHeight: 18,
-    fontFamily: 'Inter_400Regular',
+    
   },
   brand: {
     fontSize: 11,
     fontWeight: '700',
     color: 'rgba(255,255,255,0.8)',
     letterSpacing: 2.5,
-    fontFamily: 'Inter_700Bold',
+    
   },
 });

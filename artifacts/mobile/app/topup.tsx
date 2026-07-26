@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
   balanceLabel: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   balanceValue: {
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   infoCard: {
     borderRadius: 14,
@@ -199,19 +199,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   infoText: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     lineHeight: 19,
   },
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_600SemiBold',
+    
     paddingHorizontal: 2,
     marginBottom: -6,
   },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: '#000',
-    fontFamily: 'Inter_700Bold',
+    
   },
   pkgIconBox: {
     width: 50,
@@ -254,12 +254,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   pkgPoints: {
     fontSize: 14,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   pkgPriceCol: {
     alignItems: 'flex-end',
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   pkgPrice: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   buyBtn: {
     paddingHorizontal: 16,
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#000000',
-    fontFamily: 'Inter_700Bold',
+    
   },
   benefitsCard: {
     borderRadius: 14,
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
     marginBottom: 2,
   },
   benefitRow: {
@@ -303,13 +303,13 @@ const styles = StyleSheet.create({
   benefitText: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_400Regular',
+    
     flex: 1,
   },
   disclaimer: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
     lineHeight: 18,
   },

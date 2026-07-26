@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   pointsChip: {
     flexDirection: 'row',
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 12,
     color: COLORS.gold,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   scrollContent: {
     paddingHorizontal: H_PAD,
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   grid: {
     flexDirection: 'row',
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_600SemiBold',
+    
     textAlign: 'center',
     lineHeight: 15,
   },
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
   },
   levelText: {
     fontSize: 10,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   barBg: {
     height: 3,
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
   maxText: {
     fontSize: 11,
     color: COLORS.green,
-    fontFamily: 'Inter_700Bold',
+    
   },
   buyBtn: {
     flexDirection: 'row',
@@ -478,13 +478,13 @@ const styles = StyleSheet.create({
   },
   buyText: {
     fontSize: 11,
-    fontFamily: 'Inter_700Bold',
+    
     fontWeight: '700',
   },
   durationText: {
     fontSize: 10,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   activeBadge: {
     alignItems: 'center',
@@ -494,6 +494,6 @@ const styles = StyleSheet.create({
   activeText: {
     fontSize: 11,
     color: COLORS.green,
-    fontFamily: 'Inter_700Bold',
+    
   },
 });

@@ -171,17 +171,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   txDesc: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   txDate: {
     fontSize: 11,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     marginTop: 2,
   },
   txRight: {
@@ -192,12 +192,12 @@ const styles = StyleSheet.create({
   txAmount: {
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Inter_700Bold',
+    
   },
   txAmountSub: {
     fontSize: 10,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   statusChip: {
     borderRadius: 6,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 10,
-    fontFamily: 'Inter_600SemiBold',
+    
     fontWeight: '600',
   },
   empty: {
@@ -221,12 +221,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   emptyText: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
     lineHeight: 19,
   },

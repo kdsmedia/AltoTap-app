@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   emailLabel: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   avatar: {
     width: 80,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   nameRow: {
     flexDirection: 'row',
@@ -253,12 +253,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   memberLabel: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   nameEditRow: {
     flexDirection: 'row',
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     color: COLORS.textPrimary,
     fontSize: 16,
-    fontFamily: 'Inter_500Medium',
+    
     borderWidth: 1,
     borderColor: COLORS.gold,
   },
@@ -299,13 +299,13 @@ const styles = StyleSheet.create({
   balanceLabel: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   balanceValue: {
     fontSize: 40,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   balanceRow: {
     flexDirection: 'row',
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   balanceStatText: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   statsGrid: {
     flexDirection: 'row',
@@ -341,12 +341,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   statLabel: {
     fontSize: 11,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
   },
   navCard: {
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_500Medium',
+    
   },
   navRight: {
     flexDirection: 'row',
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   navValue: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   divider: {
     height: 1,

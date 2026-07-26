@@ -127,26 +127,18 @@ export default function TapScreen() {
           </View>
         </View>
 
-        {/* Right side: energy chip + wallet button */}
-        <View style={styles.headerRight}>
-          <View style={styles.energyChip}>
-            <Ionicons name="flash" size={13} color={COLORS.amber} />
-            <Text style={styles.energyLabel}>
-              {fmt(gameState.energy)}/{fmt(gameState.maxEnergy)}
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => router.push('/withdraw')}
-            style={styles.walletBtn}
-            testID="wallet-btn"
-          >
-            <Image
-              source={require('@/assets/images/wallet-icon.png')}
-              style={styles.walletIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
+        {/* Wallet button — pojok atas kanan */}
+        <TouchableOpacity
+          onPress={() => router.push('/withdraw')}
+          style={styles.walletBtn}
+          testID="wallet-btn"
+        >
+          <Image
+            source={require('@/assets/images/wallet-icon.png')}
+            style={styles.walletIcon}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Tap Zone */}
@@ -238,42 +230,31 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
     textShadow: '0px 1px 4px rgba(0,0,0,0.6)',
   },
   balanceSuffix: {
     fontSize: 13,
     color: COLORS.goldLight,
-    fontFamily: 'Inter_400Regular',
+    
     marginTop: 2,
     textShadow: '0px 1px 3px rgba(0,0,0,0.5)',
   },
-  /* ── Right cluster ── */
-  headerRight: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 4,
+  /* ── Pojok kiri: tombol bonus spin ── */
+  giftBtn: {
+    padding: 2,
   },
-  energyChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: COLORS.surfaceVariant,
-    paddingHorizontal: 7,
-    paddingVertical: 4,
-    borderRadius: 20,
+  giftIcon: {
+    width: 44,
+    height: 44,
   },
-  energyLabel: {
-    fontSize: 10,
-    color: COLORS.textSecondary,
-    fontFamily: 'Inter_500Medium',
-  },
+  /* ── Pojok kanan: tombol dompet ── */
   walletBtn: {
     padding: 2,
   },
   walletIcon: {
-    width: 36,
-    height: 36,
+    width: 44,
+    height: 44,
   },
   tapZone: {
     flex: 1,
@@ -302,7 +283,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
     textShadowColor: COLORS.goldDark,
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
@@ -310,7 +291,7 @@ const styles = StyleSheet.create({
   tapHint: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     marginBottom: 20,
   },
   energySection: {
@@ -331,7 +312,7 @@ const styles = StyleSheet.create({
   },
   energyText: {
     fontSize: 12,
-    fontFamily: 'Inter_500Medium',
+    
     textAlign: 'center',
   },
 });

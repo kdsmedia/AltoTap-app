@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   progressChip: {
     backgroundColor: COLORS.surfaceVariant,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 12,
     color: COLORS.gold,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   progressBarBg: {
     height: 3,
@@ -282,12 +282,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   sectionCount: {
     fontSize: 11,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   grid: {
     flexDirection: 'row',
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_600SemiBold',
+    
     textAlign: 'center',
     lineHeight: 15,
   },
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 10,
     color: COLORS.gold,
-    fontFamily: 'Inter_600SemiBold',
+    
   },
   spacer: { flex: 1 },
   doneRow: {
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#000',
-    fontFamily: 'Inter_700Bold',
+    
   },
   openBtn: {
     flexDirection: 'row',
@@ -373,6 +373,6 @@ const styles = StyleSheet.create({
   openBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    fontFamily: 'Inter_700Bold',
+    
   },
 });

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
     marginTop: 6,
     marginBottom: 2,
     paddingHorizontal: 4,
@@ -169,11 +169,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_400Regular',
+    
   },
   statValue: {
     fontSize: 14,
-    fontFamily: 'Inter_600SemiBold',
+    
     fontWeight: '600',
     textAlign: 'right',
   },

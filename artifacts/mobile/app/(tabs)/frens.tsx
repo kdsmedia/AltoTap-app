@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
     paddingHorizontal: 4,
   },
   subheading: {
     fontSize: 14,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     paddingHorizontal: 4,
     marginTop: -8,
   },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   refLinkBox: {
     backgroundColor: COLORS.surfaceVariant,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   refLinkText: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   codeRow: {
     alignItems: 'center',
@@ -211,13 +211,13 @@ const styles = StyleSheet.create({
   codeLabel: {
     fontSize: 11,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   codeValue: {
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
     letterSpacing: 3,
   },
   shareBtn: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#000000',
-    fontFamily: 'Inter_700Bold',
+    
   },
   statsRow: {
     flexDirection: 'row',
@@ -251,12 +251,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   statLabel: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
   },
   howCard: {
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   howRow: {
     flexDirection: 'row',
@@ -289,12 +289,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   howText: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_400Regular',
+    
     flex: 1,
   },
 });

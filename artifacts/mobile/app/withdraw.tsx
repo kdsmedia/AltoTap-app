@@ -245,18 +245,18 @@ const styles = StyleSheet.create({
   balanceLabel: {
     fontSize: 13,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   balanceValue: {
     fontSize: 40,
     fontWeight: '700',
     color: COLORS.gold,
-    fontFamily: 'Inter_700Bold',
+    
   },
   balanceSub: {
     fontSize: 14,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   warningRow: {
     flexDirection: 'row',
@@ -271,13 +271,13 @@ const styles = StyleSheet.create({
   warningText: {
     fontSize: 12,
     color: COLORS.amber,
-    fontFamily: 'Inter_500Medium',
+    
   },
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textSecondary,
-    fontFamily: 'Inter_600SemiBold',
+    
     paddingHorizontal: 2,
     marginBottom: -4,
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
+    
   },
   optionSelectedText: {
     color: COLORS.gold,
@@ -316,12 +316,12 @@ const styles = StyleSheet.create({
   optionPts: {
     fontSize: 11,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
   },
   optionRupiah: {
     fontSize: 12,
     color: COLORS.green,
-    fontFamily: 'Inter_500Medium',
+    
     marginTop: 4,
   },
   methodsList: {
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     color: COLORS.textPrimary,
-    fontFamily: 'Inter_500Medium',
+    
   },
   inputCard: {
     borderRadius: 14,
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     color: COLORS.textPrimary,
     fontSize: 15,
-    fontFamily: 'Inter_400Regular',
+    
   },
   inputDivider: {
     height: 1,
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#000000',
-    fontFamily: 'Inter_700Bold',
+    
   },
   submitTextDisabled: {
     color: COLORS.textMuted,
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     fontSize: 12,
     color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+    
     textAlign: 'center',
     lineHeight: 18,
   },
