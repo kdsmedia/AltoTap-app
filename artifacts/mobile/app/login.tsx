@@ -69,32 +69,32 @@ const styles = StyleSheet.create({
   loader: {
     marginBottom: 8,
   },
-  /* ── Yellow pill button — identical to reference screenshot ── */
+  /* ── Yellow pill button — matches reference screenshot ── */
   googleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
     backgroundColor: '#FFD600',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+    paddingVertical: 13,
+    paddingHorizontal: 22,
     borderRadius: 50,
-    width: '100%',
     gap: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 10,
   },
   gIcon: {
-    width: 26,
-    height: 26,
+    width: 28,
+    height: 28,
   },
   gText: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '900',
     color: '#000',
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
     fontFamily: 'Inter_700Bold',
   },
   disclaimer: {
