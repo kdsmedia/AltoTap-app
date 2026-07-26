@@ -160,8 +160,8 @@ export default function TapScreen() {
         {gameState.energy > 0 ? 'Ketuk koin untuk mendapatkan poin' : 'Energi habis! Tunggu isi ulang...'}
       </Text>
 
-      {/* Energy Bar */}
-      <View style={styles.energySection}>
+      {/* Energy Bar — sits above the floating tab bar */}
+      <View style={[styles.energySection, { paddingBottom: Platform.OS === 'web' ? 34 : insets.bottom + 80 }]}>
         <View style={styles.energyBarBg}>
           <Animated.View
             style={[
@@ -278,7 +278,6 @@ const styles = StyleSheet.create({
   energySection: {
     width: '100%',
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'web' ? 34 : 90,
     gap: 6,
   },
   energyBarBg: {

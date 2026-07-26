@@ -51,9 +51,9 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          height: 72 + (isWeb ? 0 : insets.bottom),
-          paddingBottom: isWeb ? 0 : insets.bottom,
-          paddingTop: 4,
+          height: 68 + (isWeb ? 0 : insets.bottom),
+          paddingBottom: isWeb ? 0 : insets.bottom + 2,
+          paddingTop: 0,
         },
         tabBarBackground: () => null,
       }}
