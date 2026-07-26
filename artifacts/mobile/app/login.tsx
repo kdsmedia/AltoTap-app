@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  ImageBackground,
   Platform,
   StyleSheet,
   Text,
@@ -18,12 +17,8 @@ export default function LoginScreen() {
   const botPad = Platform.OS === 'web' ? 48 : insets.bottom + 32;
 
   return (
-    <ImageBackground
-      source={require('@/assets/images/login-bg.jpg')}
-      style={styles.container}
-      resizeMode="cover"
-    >
-      {/* Floating UI elements pinned to the lower portion of the screen */}
+    <View style={styles.container}>
+      {/* Buttons centered in lower half of screen */}
       <View style={[styles.bottom, { paddingBottom: botPad }]}>
         {signingIn ? (
           <ActivityIndicator size="large" color="#FFD600" style={styles.loader} />
@@ -56,13 +51,14 @@ export default function LoginScreen() {
 
         <Text style={styles.brand}>ALTOMEDIA</Text>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   bottom: {
     position: 'absolute',
@@ -71,12 +67,13 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     paddingHorizontal: 28,
-    gap: 12,
+    paddingTop: 40,
+    gap: 14,
   },
   loader: {
     marginBottom: 8,
   },
-  /* ── Yellow pill button — matches reference screenshot ── */
+  /* ── Yellow pill button ── */
   googleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -84,7 +81,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#FFD600',
     paddingVertical: 13,
-    paddingHorizontal: 22,
+    paddingHorizontal: 24,
     borderRadius: 50,
     gap: 10,
     shadowColor: '#000',
@@ -93,7 +90,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
   },
-
   gText: {
     fontSize: 16,
     fontWeight: '900',
@@ -101,32 +97,34 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
     fontFamily: 'Inter_700Bold',
   },
+  /* ── Ghost pill button ── */
   guestBtn: {
     alignSelf: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 22,
+    paddingHorizontal: 24,
     borderRadius: 50,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.45)',
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   guestText: {
     fontSize: 13,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.85)',
+    color: 'rgba(255,255,255,0.8)',
     letterSpacing: 1.5,
     fontFamily: 'Inter_700Bold',
   },
   disclaimer: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.88)',
+    color: 'rgba(255,255,255,0.6)',
     textAlign: 'center',
     lineHeight: 18,
     fontFamily: 'Inter_400Regular',
+    marginTop: 4,
   },
   brand: {
     fontSize: 11,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(255,255,255,0.35)',
     letterSpacing: 2.5,
     fontFamily: 'Inter_700Bold',
   },
