@@ -100,32 +100,41 @@ export default function TapScreen() {
     <BgWrapper style={styles.container}>
       {/* Header – balance */}
       <View style={[styles.header, { paddingTop: topPad }]}>
-        <View style={styles.balanceRow}>
-          {/* Gift / Spin button */}
-          <TouchableOpacity
-            onPress={() => router.push('/spin')}
-            style={styles.giftBtn}
-            testID="gift-spin-btn"
-          >
-            <Image
-              source={require('@/assets/images/gift-spin.png')}
-              style={styles.giftIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <Ionicons name="wallet-outline" size={20} color={COLORS.gold} />
-          <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
-          <Text style={styles.balanceSuffix}>poin</Text>
+        {/* Gift / Spin button — left */}
+        <TouchableOpacity
+          onPress={() => router.push('/spin')}
+          style={styles.giftBtn}
+          testID="gift-spin-btn"
+        >
+          <Image
+            source={require('@/assets/images/gift-spin.png')}
+            style={styles.giftIcon}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+
+        {/* Center: banner + points */}
+        <View style={styles.bannerWrap}>
+          <Image
+            source={require('@/assets/images/points-banner.png')}
+            style={styles.bannerImg}
+            resizeMode="stretch"
+          />
+          <View style={styles.bannerContent}>
+            <Ionicons name="wallet-outline" size={15} color={COLORS.gold} style={{ marginRight: 4 }} />
+            <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
+            <Text style={styles.balanceSuffix}> poin</Text>
+          </View>
         </View>
 
+        {/* Right side: energy chip + wallet button */}
         <View style={styles.headerRight}>
           <View style={styles.energyChip}>
-            <Ionicons name="flash" size={14} color={COLORS.amber} />
+            <Ionicons name="flash" size={13} color={COLORS.amber} />
             <Text style={styles.energyLabel}>
               {fmt(gameState.energy)}/{fmt(gameState.maxEnergy)}
             </Text>
           </View>
-          {/* Wallet / Withdraw button */}
           <TouchableOpacity
             onPress={() => router.push('/withdraw')}
             style={styles.walletBtn}
@@ -204,42 +213,58 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
     paddingBottom: 12,
   },
-  balanceRow: {
+  /* ── Center banner ── */
+  bannerWrap: {
+    flex: 1,
+    marginHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bannerImg: {
+    width: '100%',
+    height: 48,
+    borderRadius: 24,
+  },
+  bannerContent: {
+    position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    justifyContent: 'center',
   },
   balanceValue: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: '700',
     color: COLORS.gold,
     fontFamily: 'Inter_700Bold',
+    textShadow: '0px 1px 4px rgba(0,0,0,0.6)',
   },
   balanceSuffix: {
-    fontSize: 14,
-    color: COLORS.textMuted,
+    fontSize: 13,
+    color: COLORS.goldLight,
     fontFamily: 'Inter_400Regular',
-    marginTop: 4,
+    marginTop: 2,
+    textShadow: '0px 1px 3px rgba(0,0,0,0.5)',
   },
+  /* ── Right cluster ── */
   headerRight: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 8,
+    gap: 4,
   },
   energyChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 3,
     backgroundColor: COLORS.surfaceVariant,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
     borderRadius: 20,
   },
   energyLabel: {
-    fontSize: 12,
+    fontSize: 10,
     color: COLORS.textSecondary,
     fontFamily: 'Inter_500Medium',
   },
@@ -247,8 +272,8 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   walletIcon: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
   },
   tapZone: {
     flex: 1,
