@@ -6,13 +6,16 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
+import BgWrapper from '@/components/BgWrapper';
 
 interface Particle {
   id: number;
@@ -27,6 +30,7 @@ function fmt(n: number): string {
 
 export default function TapScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { gameState, tap } = useGame();
   const [particles, setParticles] = useState<Particle[]>([]);
   const particleId = useRef(0);
@@ -92,7 +96,7 @@ export default function TapScreen() {
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
 
   return (
-    <View style={styles.container}>
+    <BgWrapper style={styles.container}>
       {/* Header – balance */}
       <View style={[styles.header, { paddingTop: topPad }]}>
         <View style={styles.balanceRow}>
@@ -100,11 +104,26 @@ export default function TapScreen() {
           <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
           <Text style={styles.balanceSuffix}>poin</Text>
         </View>
+
         <View style={styles.headerRight}>
-          <Ionicons name="flash" size={14} color={COLORS.amber} />
-          <Text style={styles.energyLabel}>
-            {fmt(gameState.energy)}/{fmt(gameState.maxEnergy)}
-          </Text>
+          <View style={styles.energyChip}>
+            <Ionicons name="flash" size={14} color={COLORS.amber} />
+            <Text style={styles.energyLabel}>
+              {fmt(gameState.energy)}/{fmt(gameState.maxEnergy)}
+            </Text>
+          </View>
+          {/* Wallet / Withdraw button */}
+          <TouchableOpacity
+            onPress={() => router.push('/withdraw')}
+            style={styles.walletBtn}
+            testID="wallet-btn"
+          >
+            <Image
+              source={require('@/assets/images/wallet-icon.png')}
+              style={styles.walletIcon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -158,14 +177,13 @@ export default function TapScreen() {
           Energi: {fmt(gameState.energy)} / {fmt(gameState.maxEnergy)}
         </Text>
       </View>
-    </View>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
     alignItems: 'center',
   },
   header: {
@@ -196,6 +214,11 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
+  },
+  energyChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     backgroundColor: COLORS.surfaceVariant,
     paddingHorizontal: 10,
@@ -206,6 +229,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.textSecondary,
     fontFamily: 'Inter_500Medium',
+  },
+  walletBtn: {
+    padding: 2,
+  },
+  walletIcon: {
+    width: 40,
+    height: 40,
   },
   tapZone: {
     flex: 1,

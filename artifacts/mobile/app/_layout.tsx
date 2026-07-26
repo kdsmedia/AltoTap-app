@@ -57,7 +57,7 @@ function RootLayoutNav() {
           headerStyle: { backgroundColor: COLORS.surface },
           headerTintColor: COLORS.textPrimary,
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: COLORS.background },
+          contentStyle: { backgroundColor: 'transparent' },
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

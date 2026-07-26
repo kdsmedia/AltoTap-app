@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
+import BgWrapper from '@/components/BgWrapper';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -48,6 +49,7 @@ export default function FrensScreen() {
   const bonusEarned = gameState.friendsInvited * BONUS_PER_FRIEND;
 
   return (
+    <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
       contentContainerStyle={styles.content}
@@ -123,13 +125,13 @@ export default function FrensScreen() {
         ))}
       </View>
     </ScrollView>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   content: {
     paddingHorizontal: 16,

@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useGame, type Task } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
+import BgWrapper from '@/components/BgWrapper';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -75,7 +76,7 @@ export default function TasksScreen() {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: topPad }]}>
+    <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.heading}>Tugas</Text>
@@ -116,14 +117,13 @@ export default function TasksScreen() {
         )}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       />
-    </View>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: 'row',

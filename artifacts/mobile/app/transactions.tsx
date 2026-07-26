@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useGame, type Transaction } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
+import BgWrapper from '@/components/BgWrapper';
 
 function fmt(n: number): string {
   return Math.abs(n).toLocaleString('id-ID');
@@ -113,7 +114,7 @@ export default function TransactionsScreen() {
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
 
   return (
-    <View style={[styles.container, { paddingTop: topPad }]}>
+    <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
       {gameState.transactions.length === 0 ? (
         <View style={styles.empty}>
           <Ionicons name="receipt-outline" size={48} color={COLORS.textMuted} />
@@ -132,14 +133,13 @@ export default function TransactionsScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </View>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   list: {
     padding: 16,

@@ -21,7 +21,7 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require('@/assets/images/login-bg.jpg')}
+      source={require('@/assets/images/app-bg.png')}
       style={styles.bg}
       resizeMode="cover"
     >

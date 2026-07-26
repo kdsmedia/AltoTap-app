@@ -50,7 +50,7 @@ export default function SplashLoading({ onDone }: Props) {
     <View style={styles.container}>
       {/* Full-screen splash image */}
       <Image
-        source={require('@/assets/images/splash-bg.png')}
+        source={require('@/assets/images/app-bg.png')}
         style={StyleSheet.absoluteFill}
         resizeMode="cover"
       />

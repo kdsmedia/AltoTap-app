@@ -18,6 +18,7 @@ import {
   useGame,
 } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
+import BgWrapper from '@/components/BgWrapper';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -162,7 +163,7 @@ export default function UpgradesScreen() {
   const lrc = gameState.rechargeLevel;
 
   return (
-    <View style={[styles.container, { paddingTop: topPad }]}>
+    <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
       <Text style={styles.heading}>Peningkatan</Text>
       <Text style={styles.subheading}>
         Poin kamu:{' '}
@@ -218,14 +219,13 @@ export default function UpgradesScreen() {
           onBuy={handleBuy}
         />
       </ScrollView>
-    </View>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   heading: {
     fontSize: 24,

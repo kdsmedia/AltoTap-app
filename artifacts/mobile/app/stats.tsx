@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import { MULTI_TAP_UPGRADES, ENERGY_CAP_UPGRADES, RECHARGE_UPGRADES } from '@/context/GameContext';
+import BgWrapper from '@/components/BgWrapper';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -50,6 +51,7 @@ export default function StatsScreen() {
   const completedTasks = gameState.tasks.filter(t => t.completed).length;
 
   return (
+    <BgWrapper>
     <ScrollView
       style={[styles.container, { paddingTop: topPad }]}
       contentContainerStyle={styles.content}
@@ -119,13 +121,13 @@ export default function StatsScreen() {
         />
       </View>
     </ScrollView>
+    </BgWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   content: {
     padding: 16,
