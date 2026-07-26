@@ -170,24 +170,9 @@ export default function ProfileScreen() {
       <View style={styles.navCard}>
         <NavRow
           icon="bar-chart"
-          label="Statistik Lengkap"
+          label="Statistik"
           color={COLORS.blue}
           onPress={() => router.push('/stats')}
-        />
-        <View style={styles.divider} />
-        <NavRow
-          icon="diamond"
-          label="Isi Ulang VIP"
-          color={COLORS.gold}
-          onPress={() => router.push('/topup')}
-        />
-        <View style={styles.divider} />
-        <NavRow
-          icon="wallet"
-          label="Tarik Poin"
-          value={`${fmt(gameState.points)} poin`}
-          color={COLORS.green}
-          onPress={() => router.push('/withdraw')}
         />
         <View style={styles.divider} />
         <NavRow
