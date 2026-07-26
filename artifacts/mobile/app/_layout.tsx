@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from '@expo-google-fonts/inter';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { GameProvider } from '@/context/GameContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { COLORS } from '@/constants/colors';
+import SplashLoading from '@/components/SplashLoading';
+
+SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
+
+// Handles auth-based routing after splash
+function AuthGate() {
+  const { user, authLoading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (authLoading) return;
+    const onLoginScreen = segments[0] === 'login';
+    if (!user && !onLoginScreen) {
+      router.replace('/login');
+    } else if (user && onLoginScreen) {
+      router.replace('/');
+    }
+  }, [user, authLoading, segments]);
+
+  return null;
+}
+
+function RootLayoutNav() {
+  const [splashDone, setSplashDone] = useState(false);
+
+  if (!splashDone) {
+    return <SplashLoading onDone={() => setSplashDone(true)} />;
+  }
+
+  return (
+    <>
+      <AuthGate />
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: COLORS.surface },
+          headerTintColor: COLORS.textPrimary,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: COLORS.background },
+        }}
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="stats" options={{ title: 'Statistik', headerBackTitle: 'Kembali' }} />
+        <Stack.Screen name="withdraw" options={{ title: 'Tarik Poin', headerBackTitle: 'Kembali' }} />
+        <Stack.Screen name="topup" options={{ title: 'Isi Ulang VIP', headerBackTitle: 'Kembali' }} />
+        <Stack.Screen name="transactions" options={{ title: 'Riwayat Transaksi', headerBackTitle: 'Kembali' }} />
+      </Stack>
+    </>
+  );
+}
+
+export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) return null;
+
+  return (
+    <SafeAreaProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <KeyboardProvider>
+              <AuthProvider>
+                <GameProvider>
+                  <RootLayoutNav />
+                </GameProvider>
+              </AuthProvider>
+            </KeyboardProvider>
+          </GestureHandlerRootView>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
+  );
+}
