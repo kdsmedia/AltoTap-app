@@ -21,6 +21,7 @@ import {
 } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { useRewardedAd } from '@/hooks/useRewardedAd';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -116,6 +117,7 @@ function UpgradeMiniCard({
           testID={`upgrade-${type}`}
           disabled={!canAfford}
         >
+          <Ionicons name="play-circle-outline" size={11} color={canAfford ? '#000' : COLORS.textMuted} />
           <Ionicons name="flash" size={11} color={canAfford ? '#000' : COLORS.textMuted} />
           <Text style={[styles.buyText, { color: canAfford ? '#000' : COLORS.textMuted }]}>
             {fmt(nextCost)}
@@ -190,6 +192,11 @@ function RobotMiniCard({
           disabled={!canAfford || blocked}
           testID={`rent-${robot.id}`}
         >
+          <Ionicons
+            name="play-circle-outline"
+            size={11}
+            color={canAfford && !blocked ? '#000' : COLORS.textMuted}
+          />
           <Text
             style={[
               styles.buyText,
@@ -208,28 +215,35 @@ export default function UpgradesScreen() {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const { gameState, buyUpgrade, rentAutoTap } = useGame();
+  const { showAd } = useRewardedAd();
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
 
   const cardWidth = Math.floor((width - H_PAD * 2 - GAP * 2) / 3);
 
+  /** Tonton iklan reward → lalu beli upgrade */
   const handleBuy = (type: UpgradeType) => {
-    const result = buyUpgrade(type);
-    Haptics.notificationAsync(
-      result.success
-        ? Haptics.NotificationFeedbackType.Success
-        : Haptics.NotificationFeedbackType.Error
-    );
-    if (!result.success) Alert.alert('Gagal', result.message);
+    showAd(() => {
+      const result = buyUpgrade(type);
+      Haptics.notificationAsync(
+        result.success
+          ? Haptics.NotificationFeedbackType.Success
+          : Haptics.NotificationFeedbackType.Error
+      );
+      if (!result.success) Alert.alert('Gagal', result.message);
+    });
   };
 
+  /** Tonton iklan reward → lalu sewa robot */
   const handleRent = (robotId: string) => {
-    const result = rentAutoTap(robotId);
-    Haptics.notificationAsync(
-      result.success
-        ? Haptics.NotificationFeedbackType.Success
-        : Haptics.NotificationFeedbackType.Error
-    );
-    if (!result.success) Alert.alert('Gagal', result.message);
+    showAd(() => {
+      const result = rentAutoTap(robotId);
+      Haptics.notificationAsync(
+        result.success
+          ? Haptics.NotificationFeedbackType.Success
+          : Haptics.NotificationFeedbackType.Error
+      );
+      if (!result.success) Alert.alert('Gagal', result.message);
+    });
   };
 
   const mt = MULTI_TAP_UPGRADES;

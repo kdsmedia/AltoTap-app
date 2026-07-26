@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { useRewardedAd } from '@/hooks/useRewardedAd';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -24,6 +25,7 @@ const BONUS_PER_FRIEND = 5000;
 export default function FrensScreen() {
   const insets = useSafeAreaInsets();
   const { gameState } = useGame();
+  const { showAd } = useRewardedAd();
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
 
   // Generate referral code based on username hash
@@ -34,16 +36,15 @@ export default function FrensScreen() {
     .padEnd(6, 'X')}`;
   const referralLink = `https://altotap.app/join?ref=${referralCode}`;
 
-  const handleShare = async () => {
-    try {
+  /** Tonton iklan reward → lalu buka share sheet */
+  const handleShare = () => {
+    showAd(() => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      await Share.share({
+      Share.share({
         message: `Ayo bergabung dengan AltoTap dan dapatkan bonus 5.000 poin!\nGunakan kode referral saya: ${referralCode}\n${referralLink}`,
         title: 'Undang Teman ke AltoTap',
-      });
-    } catch {
-      // User cancelled
-    }
+      }).catch(() => {});
+    });
   };
 
   const bonusEarned = gameState.friendsInvited * BONUS_PER_FRIEND;
@@ -83,11 +84,13 @@ export default function FrensScreen() {
           </View>
         </View>
 
+        {/* Tombol share: tonton iklan → share */}
         <TouchableOpacity
           style={styles.shareBtn}
           onPress={handleShare}
           testID="share-btn"
         >
+          <Ionicons name="play-circle-outline" size={18} color="#000" />
           <Ionicons name="share-social" size={18} color="#000" />
           <Text style={styles.shareText}>Bagikan Sekarang</Text>
         </TouchableOpacity>
@@ -111,10 +114,10 @@ export default function FrensScreen() {
       <View style={styles.howCard}>
         <Text style={styles.howTitle}>Cara Kerja</Text>
         {[
-          { step: '1', text: 'Bagikan tautan referral ke teman' },
-          { step: '2', text: 'Teman mendaftar dan menggunakan kode referralmu' },
-          { step: '3', text: 'Kamu mendapat 5.000 poin bonus secara otomatis' },
-          { step: '4', text: 'Tidak ada batas jumlah referral!' },
+          { step: '1', text: 'Tonton iklan singkat untuk membuka share' },
+          { step: '2', text: 'Bagikan tautan referral ke teman' },
+          { step: '3', text: 'Teman mendaftar dan menggunakan kode referralmu' },
+          { step: '4', text: 'Kamu mendapat 5.000 poin bonus secara otomatis' },
         ].map(item => (
           <View key={item.step} style={styles.howRow}>
             <View style={styles.stepBubble}>

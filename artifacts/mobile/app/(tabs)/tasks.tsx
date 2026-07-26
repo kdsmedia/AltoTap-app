@@ -15,6 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { useGame, type Task } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { useRewardedAd } from '@/hooks/useRewardedAd';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -97,13 +98,15 @@ function MiniTaskCard({
           <Ionicons name="checkmark-circle" size={20} color={COLORS.green} />
         </View>
       ) : task.link ? (
-        /* Task with link: open button → triggers open + claim */
+        /* Task with link: tonton iklan → buka link & selesaikan tugas */
         <TouchableOpacity style={[styles.openBtn, { borderColor: color }]} onPress={onOpen}>
-          <Ionicons name="open-outline" size={13} color={color} />
+          <Ionicons name="play-circle-outline" size={13} color={color} />
           <Text style={[styles.openBtnText, { color }]}>Buka</Text>
         </TouchableOpacity>
       ) : (
+        /* Task tanpa link: tonton iklan → klaim reward */
         <TouchableOpacity style={styles.claimBtn} onPress={onClaim} testID={`claim-${task.id}`}>
+          <Ionicons name="play-circle-outline" size={13} color="#000" />
           <Text style={styles.claimText}>Klaim</Text>
         </TouchableOpacity>
       )}
@@ -120,7 +123,7 @@ function SectionGrid({
   tasks: Task[];
   cardWidth: number;
   onClaim: (id: string) => void;
-  onOpen: (link: string) => void;
+  onOpen: (id: string, link: string) => void;
 }) {
   return (
     <View style={styles.grid}>
@@ -130,7 +133,7 @@ function SectionGrid({
           task={task}
           cardWidth={cardWidth}
           onClaim={() => onClaim(task.id)}
-          onOpen={() => onOpen(task.link!)}
+          onOpen={() => onOpen(task.id, task.link!)}
         />
       ))}
     </View>
@@ -141,19 +144,27 @@ export default function TasksScreen() {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const { gameState, completeTask } = useGame();
+  const { showAd } = useRewardedAd();
 
   const cardWidth = Math.floor((width - H_PAD * 2 - GAP * 2) / 3);
   const completed = gameState.tasks.filter(t => t.completed).length;
   const total = gameState.tasks.length;
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
 
+  /** Tombol "Klaim" — tonton iklan dulu, lalu berikan reward */
   const handleClaim = (taskId: string) => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    completeTask(taskId);
+    showAd(() => {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      completeTask(taskId);
+    });
   };
 
-  const handleOpen = (link: string) => {
-    Linking.openURL(link).catch(() => {});
+  /** Tombol "Buka" — tonton iklan dulu, lalu buka link & selesaikan tugas */
+  const handleOpen = (taskId: string, link: string) => {
+    showAd(() => {
+      Linking.openURL(link).catch(() => {});
+      completeTask(taskId);
+    });
   };
 
   const dailyTasks = gameState.tasks.filter(t => t.section === 'daily');
@@ -334,10 +345,13 @@ const styles = StyleSheet.create({
   claimBtn: {
     backgroundColor: COLORS.gold,
     borderRadius: 7,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     paddingVertical: 6,
     alignSelf: 'stretch',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 4,
   },
   claimText: {
     fontSize: 12,
