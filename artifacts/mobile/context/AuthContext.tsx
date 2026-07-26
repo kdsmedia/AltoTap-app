@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '@/lib/storage';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -48,11 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const raw = await AsyncStorage.getItem(USER_KEY);
+        const raw = await storage.getItem(USER_KEY);
         if (raw) {
           setUser(JSON.parse(raw));
         } else {
-          const guest = await AsyncStorage.getItem(GUEST_KEY);
+          const guest = await storage.getItem(GUEST_KEY);
           if (guest === 'true') {
             setIsGuest(true);
             setUser({ id: 'guest', name: 'Tamu', email: '', picture: undefined });
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         picture: data.picture,
       };
       setUser(info);
-      await AsyncStorage.setItem(USER_KEY, JSON.stringify(info));
+      await storage.setItem(USER_KEY, JSON.stringify(info));
     } catch {
       // Sign-in failed silently — user stays on login screen
     } finally {
@@ -112,14 +112,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const guestUser: UserInfo = { id: 'guest', name: 'Tamu', email: '', picture: undefined };
     setIsGuest(true);
     setUser(guestUser);
-    await AsyncStorage.setItem(GUEST_KEY, 'true');
+    await storage.setItem(GUEST_KEY, 'true');
   };
 
   const signOut = async () => {
     setUser(null);
     setIsGuest(false);
-    await AsyncStorage.removeItem(USER_KEY);
-    await AsyncStorage.removeItem(GUEST_KEY);
+    await storage.removeItem(USER_KEY);
+    await storage.removeItem(GUEST_KEY);
   };
 
   return (

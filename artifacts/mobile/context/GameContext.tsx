@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '@/lib/storage';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -202,7 +202,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const raw = await AsyncStorage.getItem(STORAGE_KEY);
+        const raw = await storage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw) as Partial<GameState>;
           const merged: GameState = {
@@ -238,7 +238,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const persist = useCallback((state: GameState) => {
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
+      storage.setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
     }, 400);
   }, []);
 

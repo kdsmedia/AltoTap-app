@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  Image,
   ImageBackground,
   Platform,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/context/AuthContext';
 
@@ -35,11 +35,7 @@ export default function LoginScreen() {
               style={styles.googleBtn}
               testID="google-sign-in"
             >
-              <Image
-                source={require('@/assets/images/google-icon.png')}
-                style={styles.gIcon}
-                resizeMode="contain"
-              />
+              <AntDesign name="google" size={22} color="#EA4335" />
               <Text style={styles.gText}>Masuk Dengan Google</Text>
             </TouchableOpacity>
 
@@ -97,10 +93,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
   },
-  gIcon: {
-    width: 28,
-    height: 28,
-  },
+
   gText: {
     fontSize: 16,
     fontWeight: '900',
