@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, ImageSourcePropType, Platform, StyleSheet } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '@/constants/colors';
@@ -37,7 +36,6 @@ function NavIcon({
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
-  const isIOS = Platform.OS === 'ios';
   const isWeb = Platform.OS === 'web';
 
   return (
@@ -49,17 +47,15 @@ export default function TabLayout() {
         tabBarInactiveTintColor: COLORS.textMuted,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: isIOS ? 'transparent' : 'rgba(0,0,0,0.55)',
+          backgroundColor: 'transparent',
           borderTopWidth: 0,
           elevation: 0,
+          shadowOpacity: 0,
           height: 72 + (isWeb ? 0 : insets.bottom),
           paddingBottom: isWeb ? 0 : insets.bottom,
           paddingTop: 4,
         },
-        tabBarBackground: () =>
-          isIOS ? (
-            <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill} />
-          ) : null,
+        tabBarBackground: () => null,
       }}
     >
       <Tabs.Screen
