@@ -1,30 +1,36 @@
 # AltoTap
 
-A pnpm monorepo with an Expo mobile app and an Express API server.
+A mobile tap-game app built with Expo (React Native) and an Express API server.
 
-## Structure
+## Stack
 
-- `artifacts/mobile` — Expo (React Native) mobile app, served at `/`
-- `artifacts/api-server` — Express + Drizzle ORM API server, served at `/api`
-- `lib/db` — Drizzle schema and database client (uses Replit's managed PostgreSQL)
-- `lib/api-spec` — OpenAPI spec
-- `lib/api-zod` — Zod schemas generated from the API spec
-- `lib/api-client-react` — React Query hooks generated from the API spec
+- **Mobile** (`artifacts/mobile`): Expo Router, React Native, Google OAuth sign-in, tabs for Home / Tasks / Upgrades / Frens / Profile. Uses `@tanstack/react-query` for data fetching and AsyncStorage for local persistence.
+- **API Server** (`artifacts/api-server`): Express 5, Drizzle ORM, PostgreSQL. Serves routes under `/api`.
+- **Shared libs** (`lib/`):
+  - `@workspace/db` — Drizzle schema + PostgreSQL pool
+  - `@workspace/api-zod` — Zod schemas for API contracts
+  - `@workspace/api-client-react` — typed fetch client for the mobile app
+  - `@workspace/api-spec` — Orval config for API codegen
 
-## Running
+## Running locally on Replit
 
-Both services start automatically via their managed workflows:
+Both services start automatically via the artifact workflows:
 
-- **API Server**: `artifacts/api-server: API Server` — builds and starts on port 8080
-- **Mobile (Expo)**: `artifacts/mobile: expo` — starts Metro bundler on port 18115
-
-## Environment
-
-- `DATABASE_URL` — auto-injected by Replit (managed PostgreSQL)
-- `SESSION_SECRET` — set as a Replit Secret
+| Service | Workflow | Port |
+|---|---|---|
+| Expo Mobile | `artifacts/mobile: expo` | 18115 |
+| API Server | `artifacts/api-server: API Server` | 8080 |
 
 ## Database
 
-Uses Drizzle ORM with Replit's built-in PostgreSQL. Schema lives in `lib/db/src/schema/`. To push schema changes to dev: `pnpm --filter @workspace/db run push`.
+Uses Replit's managed PostgreSQL. `DATABASE_URL` is injected automatically at runtime — no manual setup needed.
+
+To apply schema changes: `cd lib/db && pnpm run push`
+
+## Auth
+
+Google OAuth (implicit flow) via `expo-web-browser`. Client ID is hardcoded in `artifacts/mobile/context/AuthContext.tsx`. Guest sign-in is also supported.
 
 ## User preferences
+
+<!-- Record user-confirmed preferences here -->
