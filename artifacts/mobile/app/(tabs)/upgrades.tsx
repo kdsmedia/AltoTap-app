@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Alert,
   Platform,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,97 +22,89 @@ import {
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 
+const GAP = 8;
+const H_PAD = 14;
+
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
 }
 
-type UpgradeType = 'multiTap' | 'energyCap' | 'recharge';
-
-interface UpgradeCardProps {
-  title: string;
-  subtitle: string;
-  icon: string;
-  color: string;
-  currentLevel: number;
-  maxLevel: number;
-  currentDesc: string;
-  nextDesc: string;
-  nextCost: number;
-  userPoints: number;
-  type: UpgradeType;
-  onBuy: (type: UpgradeType) => void;
+function formatRemaining(until: number): string {
+  const seconds = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
-function UpgradeCard({
+type UpgradeType = 'multiTap' | 'energyCap' | 'recharge';
+
+/* ── Upgrade mini card ── */
+function UpgradeMiniCard({
   title,
-  subtitle,
   icon,
   color,
   currentLevel,
   maxLevel,
-  currentDesc,
-  nextDesc,
   nextCost,
   userPoints,
   type,
+  cardWidth,
   onBuy,
-}: UpgradeCardProps) {
+}: {
+  title: string;
+  icon: string;
+  color: string;
+  currentLevel: number;
+  maxLevel: number;
+  nextCost: number;
+  userPoints: number;
+  type: UpgradeType;
+  cardWidth: number;
+  onBuy: (type: UpgradeType) => void;
+}) {
   const isMax = currentLevel >= maxLevel - 1;
   const canAfford = userPoints >= nextCost;
+  const progress = (currentLevel + 1) / maxLevel;
 
   return (
-    <View style={styles.card}>
-      {/* Card header */}
-      <View style={styles.cardHeader}>
-        <View style={[styles.iconBox, { backgroundColor: color + '22' }]}>
-          <Ionicons name={icon as any} size={24} color={color} />
-        </View>
-        <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>{title}</Text>
-          <Text style={styles.cardSubtitle}>{subtitle}</Text>
-        </View>
-        <View style={[styles.levelBadge, { borderColor: color }]}>
-          <Text style={[styles.levelText, { color }]}>
-            {currentLevel + 1}/{maxLevel}
-          </Text>
-        </View>
+    <View style={[styles.card, { width: cardWidth }]}>
+      {/* Icon */}
+      <View style={[styles.iconCircle, { backgroundColor: color + '22' }]}>
+        <Ionicons name={icon as any} size={22} color={color} />
       </View>
 
-      {/* Level progress */}
-      <View style={styles.levelBarBg}>
+      {/* Title */}
+      <Text style={styles.cardTitle} numberOfLines={2}>
+        {title}
+      </Text>
+
+      {/* Level */}
+      <View style={[styles.levelBadge, { borderColor: color }]}>
+        <Text style={[styles.levelText, { color }]}>
+          {currentLevel + 1}/{maxLevel}
+        </Text>
+      </View>
+
+      {/* Progress bar */}
+      <View style={styles.barBg}>
         <View
           style={[
-            styles.levelBarFill,
+            styles.barFill,
             {
-              width: `${((currentLevel + 1) / maxLevel) * 100}%` as unknown as number,
+              width: `${progress * 100}%` as unknown as number,
               backgroundColor: color,
             },
           ]}
         />
       </View>
 
-      {/* Current / Next */}
-      <View style={styles.statsRow}>
-        <View style={styles.statBox}>
-          <Text style={styles.statLabel}>Saat ini</Text>
-          <Text style={styles.statValue}>{currentDesc}</Text>
-        </View>
-        {!isMax && (
-          <>
-            <Ionicons name="arrow-forward" size={16} color={COLORS.textMuted} />
-            <View style={styles.statBox}>
-              <Text style={styles.statLabel}>Berikutnya</Text>
-              <Text style={[styles.statValue, { color }]}>{nextDesc}</Text>
-            </View>
-          </>
-        )}
-      </View>
+      {/* Spacer */}
+      <View style={styles.spacer} />
 
-      {/* Buy button */}
+      {/* Action */}
       {isMax ? (
         <View style={styles.maxTag}>
-          <Ionicons name="checkmark-circle" size={16} color={COLORS.green} />
-          <Text style={styles.maxText}>Level Maksimal</Text>
+          <Ionicons name="checkmark-circle" size={14} color={COLORS.green} />
+          <Text style={styles.maxText}>MAX</Text>
         </View>
       ) : (
         <TouchableOpacity
@@ -123,15 +116,87 @@ function UpgradeCard({
           testID={`upgrade-${type}`}
           disabled={!canAfford}
         >
-          <Ionicons
-            name="flash"
-            size={14}
-            color={canAfford ? '#000' : COLORS.textMuted}
-          />
+          <Ionicons name="flash" size={11} color={canAfford ? '#000' : COLORS.textMuted} />
+          <Text style={[styles.buyText, { color: canAfford ? '#000' : COLORS.textMuted }]}>
+            {fmt(nextCost)}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
+
+/* ── Robot mini card ── */
+function RobotMiniCard({
+  robot,
+  isActive,
+  activeRobot,
+  userPoints,
+  autoTapUntil,
+  cardWidth,
+  onRent,
+}: {
+  robot: (typeof AUTO_TAP_ROBOTS)[number];
+  isActive: boolean;
+  activeRobot: (typeof AUTO_TAP_ROBOTS)[number] | undefined;
+  userPoints: number;
+  autoTapUntil: number | null;
+  cardWidth: number;
+  onRent: (id: string) => void;
+}) {
+  const canAfford = userPoints >= robot.cost;
+  const blocked = !!activeRobot && !isActive;
+
+  return (
+    <View
+      style={[
+        styles.card,
+        { width: cardWidth },
+        isActive && styles.cardActive,
+      ]}
+    >
+      {/* Icon */}
+      <View style={[styles.iconCircle, { backgroundColor: COLORS.gold + '22' }]}>
+        <Ionicons name={robot.icon as any} size={22} color={COLORS.gold} />
+      </View>
+
+      {/* Name */}
+      <Text style={styles.cardTitle} numberOfLines={1}>
+        {robot.name}
+      </Text>
+
+      {/* Duration */}
+      <Text style={styles.durationText}>{robot.durationMinutes} mnt</Text>
+
+      {/* Spacer */}
+      <View style={styles.spacer} />
+
+      {/* Action */}
+      {isActive && autoTapUntil ? (
+        <View style={styles.activeBadge}>
+          <Ionicons name="checkmark-circle" size={14} color={COLORS.green} />
+          <Text style={styles.activeText}>{formatRemaining(autoTapUntil)}</Text>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={[
+            styles.buyBtn,
+            {
+              backgroundColor:
+                canAfford && !blocked ? COLORS.gold : COLORS.surfaceVariant,
+            },
+          ]}
+          onPress={() => onRent(robot.id)}
+          disabled={!canAfford || blocked}
+          testID={`rent-${robot.id}`}
+        >
           <Text
-            style={[styles.buyText, { color: canAfford ? '#000' : COLORS.textMuted }]}
+            style={[
+              styles.buyText,
+              { color: canAfford && !blocked ? '#000' : COLORS.textMuted },
+            ]}
           >
-            {fmt(nextCost)} poin
+            {fmt(robot.cost)}
           </Text>
         </TouchableOpacity>
       )}
@@ -141,8 +206,11 @@ function UpgradeCard({
 
 export default function UpgradesScreen() {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const { gameState, buyUpgrade, rentAutoTap } = useGame();
   const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+
+  const cardWidth = Math.floor((width - H_PAD * 2 - GAP * 2) / 3);
 
   const handleBuy = (type: UpgradeType) => {
     const result = buyUpgrade(type);
@@ -151,9 +219,7 @@ export default function UpgradesScreen() {
         ? Haptics.NotificationFeedbackType.Success
         : Haptics.NotificationFeedbackType.Error
     );
-    if (!result.success) {
-      Alert.alert('Gagal', result.message);
-    }
+    if (!result.success) Alert.alert('Gagal', result.message);
   };
 
   const handleRent = (robotId: string) => {
@@ -173,362 +239,243 @@ export default function UpgradesScreen() {
   const lec = gameState.energyCapLevel;
   const lrc = gameState.rechargeLevel;
 
+  const activeRobot =
+    gameState.autoTapUntil && gameState.autoTapUntil > Date.now()
+      ? AUTO_TAP_ROBOTS.find(r => r.id === gameState.autoTapRobotId)
+      : undefined;
+
   return (
     <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
-      <Text style={styles.heading}>Peningkatan</Text>
-      <Text style={styles.subheading}>
-        Poin kamu:{' '}
-        <Text style={styles.pointsHighlight}>{fmt(gameState.points)}</Text>
-      </Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.heading}>Peningkatan</Text>
+        <View style={styles.pointsChip}>
+          <Ionicons name="star" size={12} color={COLORS.gold} />
+          <Text style={styles.pointsText}>{fmt(gameState.points)}</Text>
+        </View>
+      </View>
 
       <ScrollView
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: Platform.OS === 'web' ? 34 : insets.bottom + 90 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
-        <UpgradeCard
-          title="Multi-tap"
-          subtitle="Poin per ketukan"
-          icon="hand-left"
-          color={COLORS.gold}
-          type="multiTap"
-          currentLevel={lmt}
-          maxLevel={mt.length}
-          currentDesc={mt[lmt].description}
-          nextDesc={lmt + 1 < mt.length ? mt[lmt + 1].description : '-'}
-          nextCost={lmt + 1 < mt.length ? mt[lmt + 1].cost : 0}
-          userPoints={gameState.points}
-          onBuy={handleBuy}
-        />
-
-        <UpgradeCard
-          title="Kapasitas Energi"
-          subtitle="Batas energi maksimal"
-          icon="battery-charging"
-          color={COLORS.blue}
-          type="energyCap"
-          currentLevel={lec}
-          maxLevel={ec.length}
-          currentDesc={ec[lec].description}
-          nextDesc={lec + 1 < ec.length ? ec[lec + 1].description : '-'}
-          nextCost={lec + 1 < ec.length ? ec[lec + 1].cost : 0}
-          userPoints={gameState.points}
-          onBuy={handleBuy}
-        />
-
-        <UpgradeCard
-          title="Energi"
-          subtitle="Kecepatan isi ulang energi"
-          icon="flash"
-          color={COLORS.amber}
-          type="recharge"
-          currentLevel={lrc}
-          maxLevel={rc.length}
-          currentDesc={rc[lrc].description}
-          nextDesc={lrc + 1 < rc.length ? rc[lrc + 1].description : '-'}
-          nextCost={lrc + 1 < rc.length ? rc[lrc + 1].cost : 0}
-          userPoints={gameState.points}
-          onBuy={handleBuy}
-        />
-
-        <View style={styles.sectionHeading}>
-          <View style={styles.sectionHeadingIcon}>
-            <Ionicons name="hardware-chip-outline" size={18} color={COLORS.gold} />
-          </View>
-          <View style={styles.sectionHeadingText}>
-            <Text style={styles.sectionTitle}>Sewa Auto Tap</Text>
-            <Text style={styles.sectionSubtitle}>Robot mengetuk otomatis selama durasi sewa</Text>
-          </View>
+        {/* Upgrades section */}
+        <View style={styles.sectionTitleRow}>
+          <Ionicons name="trending-up" size={15} color={COLORS.gold} />
+          <Text style={styles.sectionTitle}>Upgrade</Text>
+        </View>
+        <View style={styles.grid}>
+          <UpgradeMiniCard
+            title="Multi-tap"
+            icon="hand-left"
+            color={COLORS.gold}
+            type="multiTap"
+            currentLevel={lmt}
+            maxLevel={mt.length}
+            nextCost={lmt + 1 < mt.length ? mt[lmt + 1].cost : 0}
+            userPoints={gameState.points}
+            cardWidth={cardWidth}
+            onBuy={handleBuy}
+          />
+          <UpgradeMiniCard
+            title="Kapasitas Energi"
+            icon="battery-charging"
+            color={COLORS.blue}
+            type="energyCap"
+            currentLevel={lec}
+            maxLevel={ec.length}
+            nextCost={lec + 1 < ec.length ? ec[lec + 1].cost : 0}
+            userPoints={gameState.points}
+            cardWidth={cardWidth}
+            onBuy={handleBuy}
+          />
+          <UpgradeMiniCard
+            title="Isi Energi"
+            icon="flash"
+            color={COLORS.amber}
+            type="recharge"
+            currentLevel={lrc}
+            maxLevel={rc.length}
+            nextCost={lrc + 1 < rc.length ? rc[lrc + 1].cost : 0}
+            userPoints={gameState.points}
+            cardWidth={cardWidth}
+            onBuy={handleBuy}
+          />
         </View>
 
-        {AUTO_TAP_ROBOTS.map(robot => {
-          const isActive =
-            gameState.autoTapRobotId === robot.id &&
-            !!gameState.autoTapUntil &&
-            gameState.autoTapUntil > Date.now();
-          const activeRobot =
-            gameState.autoTapUntil && gameState.autoTapUntil > Date.now()
-              ? AUTO_TAP_ROBOTS.find(item => item.id === gameState.autoTapRobotId)
-              : undefined;
-          const canAfford = gameState.points >= robot.cost;
-
-          return (
-            <View key={robot.id} style={[styles.robotCard, isActive && styles.robotCardActive]}>
-              <View style={[styles.robotIconBox, { backgroundColor: COLORS.gold + '22' }]}>
-                <Ionicons name={robot.icon as any} size={26} color={COLORS.gold} />
-              </View>
-              <View style={styles.robotInfo}>
-                <Text style={styles.robotTitle}>{robot.name}</Text>
-                <Text style={styles.robotDesc}>
-                  Aktif {robot.durationMinutes} menit · +{fmt(gameState.pointsPerTap)} poin/detik
-                </Text>
-                {isActive && gameState.autoTapUntil && (
-                  <Text style={styles.activeText}>
-                    Aktif · {formatRemaining(gameState.autoTapUntil)}
-                  </Text>
-                )}
-              </View>
-              {isActive ? (
-                <View style={styles.activeBadge}>
-                  <Ionicons name="checkmark-circle" size={17} color={COLORS.green} />
-                  <Text style={styles.activeBadgeText}>Aktif</Text>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    styles.rentButton,
-                    { backgroundColor: canAfford && !activeRobot ? COLORS.gold : COLORS.surfaceVariant },
-                  ]}
-                  onPress={() => handleRent(robot.id)}
-                  disabled={!canAfford || !!activeRobot}
-                  testID={`rent-${robot.id}`}
-                >
-                  <Text style={[styles.rentButtonText, { color: canAfford && !activeRobot ? '#000' : COLORS.textMuted }]}>
-                    {fmt(robot.cost)}
-                  </Text>
-                  <Text style={[styles.rentButtonCaption, { color: canAfford && !activeRobot ? '#000' : COLORS.textMuted }]}>
-                    poin
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          );
-        })}
+        {/* Robots section */}
+        <View style={[styles.sectionTitleRow, { marginTop: 18 }]}>
+          <Ionicons name="hardware-chip-outline" size={15} color={COLORS.gold} />
+          <Text style={styles.sectionTitle}>Sewa Auto Tap</Text>
+        </View>
+        <View style={styles.grid}>
+          {AUTO_TAP_ROBOTS.map(robot => {
+            const isActive =
+              gameState.autoTapRobotId === robot.id &&
+              !!gameState.autoTapUntil &&
+              gameState.autoTapUntil > Date.now();
+            return (
+              <RobotMiniCard
+                key={robot.id}
+                robot={robot}
+                isActive={isActive}
+                activeRobot={activeRobot}
+                userPoints={gameState.points}
+                autoTapUntil={gameState.autoTapUntil}
+                cardWidth={cardWidth}
+                onRent={handleRent}
+              />
+            );
+          })}
+        </View>
       </ScrollView>
     </BgWrapper>
   );
 }
 
-function formatRemaining(until: number): string {
-  const seconds = Math.max(0, Math.ceil((until - Date.now()) / 1000));
-  const minutes = Math.floor(seconds / 60);
-  return `${minutes}:${String(seconds % 60).padStart(2, '0')}`;
-}
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { flex: 1 },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: H_PAD,
+    paddingBottom: 12,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: COLORS.textPrimary,
     fontFamily: 'Inter_700Bold',
-    paddingHorizontal: 20,
   },
-  subheading: {
-    fontSize: 13,
-    color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
-    paddingHorizontal: 20,
-    paddingTop: 2,
-    paddingBottom: 16,
+  pointsChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: COLORS.surfaceVariant,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
   },
-  pointsHighlight: {
+  pointsText: {
+    fontSize: 12,
     color: COLORS.gold,
     fontFamily: 'Inter_600SemiBold',
   },
-  list: {
-    paddingHorizontal: 16,
-    gap: 14,
-    paddingBottom: Platform.OS === 'web' ? 34 : 24,
+  scrollContent: {
+    paddingHorizontal: H_PAD,
   },
-  card: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 16,
-    gap: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  cardHeader: {
+  sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 6,
+    marginBottom: 10,
   },
-  iconBox: {
-    width: 46,
-    height: 46,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardInfo: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 16,
+  sectionTitle: {
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.textPrimary,
     fontFamily: 'Inter_700Bold',
   },
-  cardSubtitle: {
-    fontSize: 12,
-    color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: GAP,
+  },
+  /* Mini card */
+  card: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    padding: 10,
+    alignItems: 'center',
+    gap: 5,
+    minHeight: 152,
+  },
+  cardActive: {
+    borderColor: COLORS.green + '88',
+    backgroundColor: COLORS.green + '12',
+  },
+  iconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 2,
+  },
+  cardTitle: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    fontFamily: 'Inter_600SemiBold',
+    textAlign: 'center',
+    lineHeight: 15,
   },
   levelBadge: {
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   levelText: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'Inter_600SemiBold',
   },
-  levelBarBg: {
-    height: 4,
+  barBg: {
+    height: 3,
     backgroundColor: COLORS.surfaceVariant,
     borderRadius: 2,
     overflow: 'hidden',
+    alignSelf: 'stretch',
   },
-  levelBarFill: {
+  barFill: {
     height: '100%',
     borderRadius: 2,
   },
-  statsRow: {
+  spacer: { flex: 1 },
+  maxTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 4,
+    paddingVertical: 5,
   },
-  statBox: {
-    flex: 1,
-  },
-  statLabel: {
+  maxText: {
     fontSize: 11,
-    color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
-  },
-  statValue: {
-    fontSize: 13,
-    color: COLORS.textPrimary,
-    fontFamily: 'Inter_600SemiBold',
-    marginTop: 2,
+    color: COLORS.green,
+    fontFamily: 'Inter_700Bold',
   },
   buyBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    borderRadius: 10,
-    paddingVertical: 11,
+    gap: 4,
+    borderRadius: 7,
+    paddingVertical: 7,
+    alignSelf: 'stretch',
   },
   buyText: {
-    fontSize: 14,
-    fontFamily: 'Inter_700Bold',
-    fontWeight: '700',
-  },
-  maxTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    justifyContent: 'center',
-    paddingVertical: 8,
-  },
-  maxText: {
-    fontSize: 13,
-    color: COLORS.green,
-    fontFamily: 'Inter_600SemiBold',
-  },
-  sectionHeading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 4,
-    paddingTop: 4,
-  },
-  sectionHeadingIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.gold + '44',
-  },
-  sectionHeadingText: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
-  },
-  sectionSubtitle: {
-    marginTop: 2,
-    fontSize: 12,
-    color: COLORS.textMuted,
-    fontFamily: 'Inter_400Regular',
-  },
-  robotCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 11,
-    padding: 13,
-    borderRadius: 14,
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  robotCardActive: {
-    borderColor: COLORS.green + '88',
-    backgroundColor: COLORS.green + '12',
-  },
-  robotIconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  robotInfo: {
-    flex: 1,
-  },
-  robotTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: COLORS.textPrimary,
-    fontFamily: 'Inter_700Bold',
-  },
-  robotDesc: {
-    marginTop: 3,
     fontSize: 11,
+    fontFamily: 'Inter_700Bold',
+    fontWeight: '700',
+  },
+  durationText: {
+    fontSize: 10,
     color: COLORS.textMuted,
     fontFamily: 'Inter_400Regular',
-  },
-  activeText: {
-    marginTop: 4,
-    fontSize: 12,
-    color: COLORS.green,
-    fontFamily: 'Inter_700Bold',
   },
   activeBadge: {
     alignItems: 'center',
     gap: 2,
-    minWidth: 48,
+    paddingVertical: 4,
   },
-  activeBadgeText: {
+  activeText: {
     fontSize: 11,
     color: COLORS.green,
     fontFamily: 'Inter_700Bold',
-  },
-  rentButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 64,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    borderRadius: 10,
-  },
-  rentButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    fontFamily: 'Inter_700Bold',
-  },
-  rentButtonCaption: {
-    fontSize: 10,
-    fontFamily: 'Inter_600SemiBold',
   },
 });
