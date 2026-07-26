@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { AD_STRIP_HEIGHT } from '@/components/AdBannerBar';
 
 interface Particle {
   id: number;
@@ -161,7 +162,7 @@ export default function TapScreen() {
       </Text>
 
       {/* Energy Bar — sits above the floating tab bar */}
-      <View style={[styles.energySection, { paddingBottom: Platform.OS === 'web' ? 34 : insets.bottom + 80 }]}>
+      <View style={[styles.energySection, { paddingBottom: Platform.OS === 'web' ? 34 : insets.bottom + 74 + 10 + AD_STRIP_HEIGHT + 8 }]}>
         <View style={styles.energyBarBg}>
           <Animated.View
             style={[
