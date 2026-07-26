@@ -9,6 +9,7 @@ WebBrowser.maybeCompleteAuthSession();
 const WEB_CLIENT_ID =
   '327513974065-stp6e2q4ebm41pj3rcaeaab3flbm46l5.apps.googleusercontent.com';
 const USER_KEY = '@altotap_user_v1';
+const GUEST_KEY = '@altotap_guest_v1';
 
 export interface UserInfo {
   id: string;
@@ -21,7 +22,9 @@ interface AuthContextType {
   user: UserInfo | null;
   authLoading: boolean;
   signingIn: boolean;
+  isGuest: boolean;
   signIn: () => Promise<void>;
+  signInAsGuest: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -29,7 +32,9 @@ export const AuthContext = createContext<AuthContextType>({
   user: null,
   authLoading: true,
   signingIn: false,
+  isGuest: false,
   signIn: async () => {},
+  signInAsGuest: async () => {},
   signOut: async () => {},
 });
 
@@ -37,13 +42,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [signingIn, setSigningIn] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
 
   // Restore persisted session
   useEffect(() => {
     (async () => {
       try {
         const raw = await AsyncStorage.getItem(USER_KEY);
-        if (raw) setUser(JSON.parse(raw));
+        if (raw) {
+          setUser(JSON.parse(raw));
+        } else {
+          const guest = await AsyncStorage.getItem(GUEST_KEY);
+          if (guest === 'true') {
+            setIsGuest(true);
+            setUser({ id: 'guest', name: 'Tamu', email: '', picture: undefined });
+          }
+        }
       } catch {
         // ignore
       } finally {
@@ -94,13 +108,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signInAsGuest = async () => {
+    const guestUser: UserInfo = { id: 'guest', name: 'Tamu', email: '', picture: undefined };
+    setIsGuest(true);
+    setUser(guestUser);
+    await AsyncStorage.setItem(GUEST_KEY, 'true');
+  };
+
   const signOut = async () => {
     setUser(null);
+    setIsGuest(false);
     await AsyncStorage.removeItem(USER_KEY);
+    await AsyncStorage.removeItem(GUEST_KEY);
   };
 
   return (
-    <AuthContext.Provider value={{ user, authLoading, signingIn, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, authLoading, signingIn, isGuest, signIn, signInAsGuest, signOut }}>
       {children}
     </AuthContext.Provider>
   );

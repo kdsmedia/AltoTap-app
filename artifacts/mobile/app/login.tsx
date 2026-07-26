@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginScreen() {
-  const { signIn, signingIn } = useAuth();
+  const { signIn, signInAsGuest, signingIn } = useAuth();
   const insets = useSafeAreaInsets();
   const botPad = Platform.OS === 'web' ? 48 : insets.bottom + 32;
 
@@ -28,19 +28,30 @@ export default function LoginScreen() {
         {signingIn ? (
           <ActivityIndicator size="large" color="#FFD600" style={styles.loader} />
         ) : (
-          <TouchableOpacity
-            onPress={signIn}
-            activeOpacity={0.82}
-            style={styles.googleBtn}
-            testID="google-sign-in"
-          >
-            <Image
-              source={require('@/assets/images/google-icon.png')}
-              style={styles.gIcon}
-              resizeMode="contain"
-            />
-            <Text style={styles.gText}>Masuk Dengan Google</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              onPress={signIn}
+              activeOpacity={0.82}
+              style={styles.googleBtn}
+              testID="google-sign-in"
+            >
+              <Image
+                source={require('@/assets/images/google-icon.png')}
+                style={styles.gIcon}
+                resizeMode="contain"
+              />
+              <Text style={styles.gText}>Masuk Dengan Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={signInAsGuest}
+              activeOpacity={0.75}
+              style={styles.guestBtn}
+              testID="guest-sign-in"
+            >
+              <Text style={styles.guestText}>MASUK SEBAGAI TAMU</Text>
+            </TouchableOpacity>
+          </>
         )}
 
         <Text style={styles.disclaimer}>
@@ -95,6 +106,21 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000',
     letterSpacing: 0.3,
+    fontFamily: 'Inter_700Bold',
+  },
+  guestBtn: {
+    alignSelf: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 22,
+    borderRadius: 50,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.45)',
+  },
+  guestText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: 'rgba(255,255,255,0.85)',
+    letterSpacing: 1.5,
     fontFamily: 'Inter_700Bold',
   },
   disclaimer: {
