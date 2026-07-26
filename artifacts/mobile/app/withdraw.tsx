@@ -16,6 +16,7 @@ import * as Haptics from 'expo-haptics';
 import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -94,6 +95,7 @@ export default function WithdrawScreen() {
     >
       {/* Balance */}
       <View style={styles.balanceCard}>
+        <MiniCardBg radius={16} />
         <Text style={styles.balanceLabel}>Saldo Tersedia</Text>
         <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
         <Text style={styles.balanceSub}>poin</Text>
@@ -123,6 +125,10 @@ export default function WithdrawScreen() {
             }}
             testID={`withdraw-opt-${opt.id}`}
           >
+            <MiniCardBg radius={12} />
+            {selectedOption.id === opt.id && (
+              <View style={styles.optionSelectedOverlay} />
+            )}
             <Text
               style={[
                 styles.optionPoints,
@@ -166,6 +172,7 @@ export default function WithdrawScreen() {
       {/* Account details */}
       <Text style={styles.sectionLabel}>Detail Rekening</Text>
       <View style={styles.inputCard}>
+        <MiniCardBg radius={14} />
         <TextInput
           style={styles.input}
           value={accountNum}
@@ -229,12 +236,10 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   balanceCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 16,
+    overflow: 'hidden',
     padding: 20,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.gold + '44',
     gap: 2,
   },
   balanceLabel: {
@@ -284,18 +289,18 @@ const styles = StyleSheet.create({
   optionCard: {
     flex: 1,
     minWidth: '44%',
-    backgroundColor: COLORS.surface,
     borderRadius: 12,
+    overflow: 'hidden',
     padding: 14,
     alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: COLORS.border,
     gap: 2,
   },
-  optionSelected: {
-    borderColor: COLORS.gold,
-    backgroundColor: COLORS.gold + '18',
+  optionSelectedOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: COLORS.gold + '28',
+    borderRadius: 12,
   },
+  optionSelected: {},
   optionDisabled: {
     opacity: 0.4,
   },
@@ -353,10 +358,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_500Medium',
   },
   inputCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     overflow: 'hidden',
   },
   input: {

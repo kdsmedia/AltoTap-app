@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useGame, type Transaction } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
   return Math.abs(n).toLocaleString('id-ID');
@@ -85,6 +86,7 @@ function TxCard({ tx }: { tx: Transaction }) {
 
   return (
     <View style={styles.card}>
+      <MiniCardBg radius={14} />
       <View style={[styles.txIcon, { backgroundColor: color + '22' }]}>
         <Ionicons name={txIcon(tx.type) as any} size={20} color={color} />
       </View>
@@ -146,14 +148,12 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   card: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   txIcon: {
     width: 42,

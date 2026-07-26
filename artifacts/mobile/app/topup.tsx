@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 import { VIP_PACKAGES, useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -61,6 +62,7 @@ export default function TopupScreen() {
     >
       {/* Balance */}
       <View style={styles.balanceCard}>
+        <MiniCardBg radius={14} />
         <Ionicons name="wallet-outline" size={20} color={COLORS.gold} />
         <View>
           <Text style={styles.balanceLabel}>Saldo Poin Kamu</Text>
@@ -70,6 +72,7 @@ export default function TopupScreen() {
 
       {/* VIP Info */}
       <View style={styles.infoCard}>
+        <MiniCardBg radius={14} />
         <View style={styles.infoHeader}>
           <Ionicons name="diamond" size={20} color={COLORS.gold} />
           <Text style={styles.infoTitle}>Paket VIP AltoTap</Text>
@@ -91,13 +94,14 @@ export default function TopupScreen() {
         return (
           <TouchableOpacity
             key={pkg.id}
-            style={[
-              styles.packageCard,
-              isSelected && { borderColor: color, backgroundColor: color + '12' },
-            ]}
+            style={[styles.packageCard]}
             onPress={() => setSelected(isSelected ? null : pkg.id)}
             testID={`pkg-${pkg.id}`}
           >
+            <MiniCardBg radius={14} />
+            {isSelected && (
+              <View style={[StyleSheet.absoluteFillObject, { backgroundColor: color + '28', borderRadius: 14 }]} />
+            )}
             {bonusPct && (
               <View style={[styles.bonusBadge, { backgroundColor: color }]}>
                 <Text style={styles.bonusBadgeText}>{bonusPct}</Text>
@@ -129,6 +133,7 @@ export default function TopupScreen() {
 
       {/* Benefits */}
       <View style={styles.benefitsCard}>
+        <MiniCardBg radius={14} />
         <Text style={styles.benefitsTitle}>Keuntungan VIP</Text>
         {[
           'Poin instan tanpa grind panjang',
@@ -161,14 +166,12 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   balanceCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderWidth: 1,
-    borderColor: COLORS.gold + '44',
   },
   balanceLabel: {
     fontSize: 12,
@@ -182,11 +185,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
   },
   infoCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 14,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     gap: 8,
   },
   infoHeader: {
@@ -215,16 +216,13 @@ const styles = StyleSheet.create({
     marginBottom: -6,
   },
   packageCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderWidth: 1.5,
-    borderColor: COLORS.border,
     position: 'relative',
-    overflow: 'hidden',
   },
   bonusBadge: {
     position: 'absolute',
@@ -285,11 +283,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
   },
   benefitsCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 14,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     gap: 10,
   },
   benefitsTitle: {

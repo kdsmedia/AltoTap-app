@@ -15,6 +15,7 @@ import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
+import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -64,6 +65,7 @@ export default function FrensScreen() {
 
       {/* Referral Card */}
       <View style={styles.refCard}>
+        <MiniCardBg radius={16} />
         <View style={styles.refIconRow}>
           <View style={styles.refIconBg}>
             <Ionicons name="link" size={22} color={COLORS.gold} />
@@ -99,11 +101,13 @@ export default function FrensScreen() {
       {/* Stats row */}
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
+          <MiniCardBg radius={14} />
           <Ionicons name="people" size={24} color={COLORS.blue} />
           <Text style={styles.statValue}>{gameState.friendsInvited}</Text>
           <Text style={styles.statLabel}>Teman Diundang</Text>
         </View>
         <View style={styles.statCard}>
+          <MiniCardBg radius={14} />
           <Ionicons name="star" size={24} color={COLORS.gold} />
           <Text style={styles.statValue}>{fmt(bonusEarned)}</Text>
           <Text style={styles.statLabel}>Bonus Diperoleh</Text>
@@ -112,6 +116,7 @@ export default function FrensScreen() {
 
       {/* How it works */}
       <View style={styles.howCard}>
+        <MiniCardBg radius={16} />
         <Text style={styles.howTitle}>Cara Kerja</Text>
         {[
           { step: '1', text: 'Tonton iklan singkat untuk membuka share' },
@@ -156,12 +161,10 @@ const styles = StyleSheet.create({
     marginTop: -8,
   },
   refCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 16,
+    overflow: 'hidden',
     padding: 16,
     gap: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   refIconRow: {
     flexDirection: 'row',
@@ -238,13 +241,11 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 16,
     alignItems: 'center',
     gap: 6,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   statValue: {
     fontSize: 22,
@@ -259,12 +260,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   howCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 16,
+    overflow: 'hidden',
     padding: 16,
     gap: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   howTitle: {
     fontSize: 16,

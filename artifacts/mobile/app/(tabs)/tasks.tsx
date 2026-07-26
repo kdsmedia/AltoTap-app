@@ -16,6 +16,7 @@ import { useGame, type Task } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
+import MiniCardBg from '@/components/MiniCardBg';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -73,6 +74,7 @@ function MiniTaskCard({
         task.completed && styles.cardDone,
       ]}
     >
+      <MiniCardBg radius={12} />
       {/* Icon */}
       <View style={[styles.iconCircle, { backgroundColor: color + '22' }]}>
         <Ionicons name={iconName as any} size={22} color={color} />
@@ -294,10 +296,8 @@ const styles = StyleSheet.create({
   },
   /* Mini card */
   card: {
-    backgroundColor: COLORS.surface,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    overflow: 'hidden',
     padding: 10,
     alignItems: 'center',
     gap: 5,

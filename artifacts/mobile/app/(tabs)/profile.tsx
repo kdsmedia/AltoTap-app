@@ -18,6 +18,7 @@ import { useGame } from '@/context/GameContext';
 import { useAuth } from '@/context/AuthContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -140,6 +141,7 @@ export default function ProfileScreen() {
 
       {/* Balance Card */}
       <View style={styles.balanceCard}>
+        <MiniCardBg radius={16} />
         <Text style={styles.balanceLabel}>Saldo Poin</Text>
         <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
         <View style={styles.balanceRow}>
@@ -159,6 +161,7 @@ export default function ProfileScreen() {
           { label: 'Poin per Ketuk', value: `${gameState.pointsPerTap}`, icon: 'flash', color: COLORS.gold },
         ].map(stat => (
           <View key={stat.label} style={styles.statCard}>
+            <MiniCardBg radius={14} />
             <Ionicons name={stat.icon as any} size={20} color={stat.color} />
             <Text style={styles.statValue}>{stat.value}</Text>
             <Text style={styles.statLabel}>{stat.label}</Text>
@@ -168,6 +171,7 @@ export default function ProfileScreen() {
 
       {/* Navigation */}
       <View style={styles.navCard}>
+        <MiniCardBg radius={16} />
         <NavRow
           icon="bar-chart"
           label="Statistik"
@@ -286,12 +290,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   balanceCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 16,
+    overflow: 'hidden',
     padding: 20,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.gold + '44',
     gap: 4,
   },
   balanceLabel: {
@@ -329,13 +331,11 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     minWidth: '44%',
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
+    overflow: 'hidden',
     padding: 14,
     alignItems: 'center',
     gap: 6,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   statValue: {
     fontSize: 20,
@@ -350,11 +350,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   navCard: {
-    backgroundColor: COLORS.surface,
     borderRadius: 16,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   navRow: {
     flexDirection: 'row',

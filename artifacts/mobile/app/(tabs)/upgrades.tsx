@@ -22,6 +22,7 @@ import {
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
+import MiniCardBg from '@/components/MiniCardBg';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -68,6 +69,7 @@ function UpgradeMiniCard({
 
   return (
     <View style={[styles.card, { width: cardWidth }]}>
+      <MiniCardBg radius={12} />
       {/* Icon */}
       <View style={[styles.iconCircle, { backgroundColor: color + '22' }]}>
         <Ionicons name={icon as any} size={22} color={color} />
@@ -154,9 +156,12 @@ function RobotMiniCard({
       style={[
         styles.card,
         { width: cardWidth },
-        isActive && styles.cardActive,
       ]}
     >
+      <MiniCardBg radius={12} />
+      {isActive && (
+        <View style={[styles.activeOverlay]} />
+      )}
       {/* Icon */}
       <View style={[styles.iconCircle, { backgroundColor: COLORS.gold + '22' }]}>
         <Ionicons name={robot.icon as any} size={22} color={COLORS.gold} />
@@ -401,18 +406,17 @@ const styles = StyleSheet.create({
   },
   /* Mini card */
   card: {
-    backgroundColor: COLORS.surface,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    overflow: 'hidden',
     padding: 10,
     alignItems: 'center',
     gap: 5,
     minHeight: 152,
   },
-  cardActive: {
-    borderColor: COLORS.green + '88',
-    backgroundColor: COLORS.green + '12',
+  activeOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: COLORS.green + '28',
+    borderRadius: 12,
   },
   iconCircle: {
     width: 40,
