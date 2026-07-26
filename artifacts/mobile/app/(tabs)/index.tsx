@@ -101,6 +101,18 @@ export default function TapScreen() {
       {/* Header – balance */}
       <View style={[styles.header, { paddingTop: topPad }]}>
         <View style={styles.balanceRow}>
+          {/* Gift / Spin button */}
+          <TouchableOpacity
+            onPress={() => router.push('/spin')}
+            style={styles.giftBtn}
+            testID="gift-spin-btn"
+          >
+            <Image
+              source={require('@/assets/images/gift-spin.png')}
+              style={styles.giftIcon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
           <Ionicons name="wallet-outline" size={20} color={COLORS.gold} />
           <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
           <Text style={styles.balanceSuffix}>poin</Text>
