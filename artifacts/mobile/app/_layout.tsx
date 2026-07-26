@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { COLORS } from '@/constants/colors';
 import SplashLoading from '@/components/SplashLoading';
 import PersistentNav from '@/components/PersistentNav';
+import PersistentHeader from '@/components/PersistentHeader';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -56,12 +57,13 @@ function RootLayoutNav() {
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="stats" options={{ title: 'Statistik', headerBackTitle: 'Kembali' }} />
-        <Stack.Screen name="withdraw" options={{ title: 'Tarik Poin', headerBackTitle: 'Kembali' }} />
-        <Stack.Screen name="topup" options={{ title: 'Isi Ulang VIP', headerBackTitle: 'Kembali' }} />
-        <Stack.Screen name="transactions" options={{ title: 'Riwayat Transaksi', headerBackTitle: 'Kembali' }} />
+        <Stack.Screen name="stats" options={{ headerShown: false }} />
+        <Stack.Screen name="withdraw" options={{ headerShown: false }} />
+        <Stack.Screen name="topup" options={{ headerShown: false }} />
+        <Stack.Screen name="transactions" options={{ headerShown: false }} />
         <Stack.Screen name="spin" options={{ headerShown: false }} />
       </Stack>
+      <PersistentHeader />
       <PersistentNav />
     </View>
   );

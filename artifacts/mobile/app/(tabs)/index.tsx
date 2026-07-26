@@ -17,6 +17,7 @@ import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { AD_STRIP_HEIGHT } from '@/components/AdBannerBar';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 interface Particle {
   id: number;
@@ -94,52 +95,10 @@ export default function TapScreen() {
   const isLowEnergy = energyPct < 0.2;
   const energyColor = isLowEnergy ? COLORS.red : COLORS.amber;
 
-  const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   return (
-    <BgWrapper style={styles.container}>
-      {/* Header – balance */}
-      <View style={[styles.header, { paddingTop: topPad }]}>
-        {/* Gift / Spin button — left */}
-        <TouchableOpacity
-          onPress={() => router.push('/spin')}
-          style={styles.giftBtn}
-          testID="gift-spin-btn"
-        >
-          <Image
-            source={require('@/assets/images/gift-spin.png')}
-            style={styles.giftIcon}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-
-        {/* Center: banner + points */}
-        <View style={styles.bannerWrap}>
-          <Image
-            source={require('@/assets/images/points-banner.png')}
-            style={styles.bannerImg}
-            resizeMode="stretch"
-          />
-          <View style={styles.bannerContent}>
-            <Ionicons name="wallet-outline" size={15} color={COLORS.gold} style={{ marginRight: 4 }} />
-            <Text style={styles.balanceValue}>{fmt(gameState.points)}</Text>
-            <Text style={styles.balanceSuffix}> poin</Text>
-          </View>
-        </View>
-
-        {/* Wallet button — pojok atas kanan */}
-        <TouchableOpacity
-          onPress={() => router.push('/withdraw')}
-          style={styles.walletBtn}
-          testID="wallet-btn"
-        >
-          <Image
-            source={require('@/assets/images/wallet-icon.png')}
-            style={styles.walletIcon}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-      </View>
+    <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
 
       {/* Tap Zone */}
       <View style={styles.tapZone}>

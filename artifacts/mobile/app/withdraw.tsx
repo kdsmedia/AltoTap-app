@@ -17,6 +17,7 @@ import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import MiniCardBg from '@/components/MiniCardBg';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -45,7 +46,7 @@ export default function WithdrawScreen() {
   const [accountNum, setAccountNum] = useState('');
   const [accountName, setAccountName] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const topPad = Platform.OS === 'web' ? 67 : insets.top;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   const canWithdraw =
     gameState.points >= selectedOption.points &&
@@ -287,13 +288,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   optionCard: {
-    flex: 1,
-    minWidth: '44%',
+    width: '47.5%',
+    aspectRatio: 1,
     borderRadius: 12,
     overflow: 'hidden',
     padding: 14,
     alignItems: 'center',
-    gap: 2,
+    justifyContent: 'center',
+    gap: 4,
   },
   optionSelectedOverlay: {
     ...StyleSheet.absoluteFillObject,

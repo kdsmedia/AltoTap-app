@@ -15,6 +15,7 @@ import { VIP_PACKAGES, useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import MiniCardBg from '@/components/MiniCardBg';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -24,7 +25,7 @@ export default function TopupScreen() {
   const insets = useSafeAreaInsets();
   const { gameState, addTransaction } = useGame();
   const [selected, setSelected] = useState<string | null>(null);
-  const topPad = Platform.OS === 'web' ? 67 : insets.top;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   const handleBuy = (pkg: (typeof VIP_PACKAGES)[0]) => {
     Alert.alert(

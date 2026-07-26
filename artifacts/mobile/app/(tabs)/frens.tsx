@@ -16,6 +16,7 @@ import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
 import MiniCardBg from '@/components/MiniCardBg';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -27,7 +28,7 @@ export default function FrensScreen() {
   const insets = useSafeAreaInsets();
   const { gameState } = useGame();
   const { showAd } = useRewardedAd();
-  const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   // Generate referral code based on username hash
   const referralCode = `ALTO${gameState.username
@@ -57,8 +58,6 @@ export default function FrensScreen() {
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 90 }]}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
-      <Text style={styles.heading}>Undang Teman</Text>
       <Text style={styles.subheading}>
         Dapatkan {fmt(BONUS_PER_FRIEND)} poin untuk setiap teman yang bergabung!
       </Text>

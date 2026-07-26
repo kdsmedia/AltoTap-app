@@ -12,6 +12,7 @@ import { useGame } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import { MULTI_TAP_UPGRADES, ENERGY_CAP_UPGRADES, RECHARGE_UPGRADES } from '@/context/GameContext';
 import BgWrapper from '@/components/BgWrapper';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 function fmt(n: number): string {
   return n.toLocaleString('id-ID');
@@ -42,7 +43,7 @@ function StatRow({
 export default function StatsScreen() {
   const insets = useSafeAreaInsets();
   const { gameState } = useGame();
-  const topPad = Platform.OS === 'web' ? 67 : insets.top;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   const multiTap = MULTI_TAP_UPGRADES[gameState.multiTapLevel];
   const energyCap = ENERGY_CAP_UPGRADES[gameState.energyCapLevel];

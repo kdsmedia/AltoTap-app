@@ -23,6 +23,7 @@ import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
 import MiniCardBg from '@/components/MiniCardBg';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -72,11 +73,11 @@ function UpgradeMiniCard({
       <MiniCardBg radius={12} />
       {/* Icon */}
       <View style={[styles.iconCircle, { backgroundColor: color + '22' }]}>
-        <Ionicons name={icon as any} size={22} color={color} />
+        <Ionicons name={icon as any} size={18} color={color} />
       </View>
 
       {/* Title */}
-      <Text style={styles.cardTitle} numberOfLines={2}>
+      <Text style={styles.cardTitle} numberOfLines={1}>
         {title}
       </Text>
 
@@ -85,19 +86,6 @@ function UpgradeMiniCard({
         <Text style={[styles.levelText, { color }]}>
           {currentLevel + 1}/{maxLevel}
         </Text>
-      </View>
-
-      {/* Progress bar */}
-      <View style={styles.barBg}>
-        <View
-          style={[
-            styles.barFill,
-            {
-              width: `${progress * 100}%` as unknown as number,
-              backgroundColor: color,
-            },
-          ]}
-        />
       </View>
 
       {/* Spacer */}
@@ -164,7 +152,7 @@ function RobotMiniCard({
       )}
       {/* Icon */}
       <View style={[styles.iconCircle, { backgroundColor: COLORS.gold + '22' }]}>
-        <Ionicons name={robot.icon as any} size={22} color={COLORS.gold} />
+        <Ionicons name={robot.icon as any} size={18} color={COLORS.gold} />
       </View>
 
       {/* Name */}
@@ -221,7 +209,7 @@ export default function UpgradesScreen() {
   const { width } = useWindowDimensions();
   const { gameState, buyUpgrade, rentAutoTap } = useGame();
   const { showAd } = useRewardedAd();
-  const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   const cardWidth = Math.floor((width - H_PAD * 2 - GAP * 2) / 3);
 
@@ -265,14 +253,6 @@ export default function UpgradesScreen() {
 
   return (
     <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.heading}>Peningkatan</Text>
-        <View style={styles.pointsChip}>
-          <Ionicons name="star" size={12} color={COLORS.gold} />
-          <Text style={styles.pointsText}>{fmt(gameState.points)}</Text>
-        </View>
-      </View>
 
       <ScrollView
         contentContainerStyle={[
@@ -408,10 +388,10 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 12,
     overflow: 'hidden',
-    padding: 10,
+    padding: 8,
     alignItems: 'center',
-    gap: 5,
-    minHeight: 152,
+    gap: 4,
+    aspectRatio: 1,
   },
   activeOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -419,9 +399,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 2,
@@ -438,7 +418,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 6,
-    paddingVertical: 2,
+    paddingVertical: 1,
   },
   levelText: {
     fontSize: 10,
@@ -473,7 +453,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
     borderRadius: 7,
-    paddingVertical: 7,
+    paddingVertical: 5,
     alignSelf: 'stretch',
   },
   buyText: {

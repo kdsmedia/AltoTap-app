@@ -17,6 +17,7 @@ import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
 import { useRewardedAd } from '@/hooks/useRewardedAd';
 import MiniCardBg from '@/components/MiniCardBg';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 
 const GAP = 8;
 const H_PAD = 14;
@@ -151,7 +152,7 @@ export default function TasksScreen() {
   const cardWidth = Math.floor((width - H_PAD * 2 - GAP * 2) / 3);
   const completed = gameState.tasks.filter(t => t.completed).length;
   const total = gameState.tasks.length;
-  const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   /** Tombol "Klaim" — tonton iklan dulu, lalu berikan reward */
   const handleClaim = (taskId: string) => {
@@ -174,9 +175,7 @@ export default function TasksScreen() {
 
   return (
     <BgWrapper style={[styles.container, { paddingTop: topPad }]}>
-      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.heading}>Tugas</Text>
         <View style={styles.progressChip}>
           <Text style={styles.progressText}>{completed}/{total}</Text>
         </View>

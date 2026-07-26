@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useGame, type Transaction } from '@/context/GameContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
@@ -113,7 +114,7 @@ function TxCard({ tx }: { tx: Transaction }) {
 export default function TransactionsScreen() {
   const insets = useSafeAreaInsets();
   const { gameState } = useGame();
-  const topPad = Platform.OS === 'web' ? 67 : insets.top;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   return (
     <BgWrapper style={[styles.container, { paddingTop: topPad }]}>

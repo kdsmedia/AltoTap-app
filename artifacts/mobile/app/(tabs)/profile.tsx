@@ -18,6 +18,7 @@ import { useGame } from '@/context/GameContext';
 import { useAuth } from '@/context/AuthContext';
 import { COLORS } from '@/constants/colors';
 import BgWrapper from '@/components/BgWrapper';
+import { HEADER_HEIGHT } from '@/components/PersistentHeader';
 import MiniCardBg from '@/components/MiniCardBg';
 
 function fmt(n: number): string {
@@ -58,7 +59,7 @@ export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(gameState.username);
-  const topPad = Platform.OS === 'web' ? 67 : insets.top + 8;
+  const topPad = HEADER_HEIGHT + (Platform.OS === 'web' ? 8 : insets.top + 8);
 
   const handleSignOut = () => {
     Alert.alert('Keluar', 'Yakin ingin keluar dari akun Google?', [
